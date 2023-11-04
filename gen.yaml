@@ -1,0 +1,16 @@
+configVersion: 1.0.0
+generation:
+  comments:
+    disableComments: false
+    omitDescriptionIfSummaryPresent: false
+  baseServerURL: ""
+  flattenGlobalSecurity: true
+  sdkClassName: Virtual-cards-API-Specification
+  singleTagPerOp: false
+  tagNamespacingDisabled: false
+go:
+  version: 0.0.1
+  clientServerStatusCodesAsErrors: true
+  flattenGlobalSecurity: true
+  maxMethodParams: 4
+  packageName: github.com/speakeasy-sdks/GDROID-sample-sdk
