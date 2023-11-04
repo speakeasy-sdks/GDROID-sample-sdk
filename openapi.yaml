@@ -1,0 +1,1845 @@
+openapi: 3.0.3
+info:
+  title: Virtual cards API Specification
+  version: 1.6.7
+  contact: {}
+  description: |
+      <h2>Authentication</h2>
+      <p>Ayoconnect API calls require your application to authenticate itself. This is done using some API keys associated with your account. You can get your API keys by signing in the portal (visit the 'Sign in' page). A pair of API keys consists of a 'client id' and a 'client secret'. <br><br>for example:
+        </p>
+      <pre>
+      <code>
+        {
+          "client_id": "xxxxxxxxxxx",
+          "client_secret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        }
+        </code>
+        </pre>
+        <p>
+        Note that once the API keys are generated and distributed with your application, you should keep them in a safe storage as they should not be shared with anybody outside your organization.
+
+        All requests to other endpoints are authenticated using HTTP bearer authentication header, with the following format:<br>
+          <pre>
+          <code>
+          Authorization: Bearer {authToken}
+          </code>
+          </pre>
+        </p>
+        <p>
+        A missing, incorrect, or revoked token will cause a 401 HTTP error to be returned.
+        </p>
+        <h2>Resource Types</h2>
+        <p>
+        URIs are relative to https://sandbox.api.of.ayoconnect.id unless otherwise noted.
+        </p>
+            <h4>Access Token</h4>
+            <ld>
+              <p>Generated Using <i>Generate Access Token</i> <code>/v1/oauth/client_credential/accesstoken</code> and passed in headers as Bearer Token. 
+                  B2B Token is mandatory in all API requests.
+              </p>
+
+        ```Authorization : Bearer <b2b_token>```
+            </ld>
+      <br>
+      <br>
+      <h2>Sequence</h2>  
+      <p>
+      <img src="https://storage.googleapis.com/vcn-static-ui-sandbox/assets/sequence.drawio.png">
+      </p>
+      
+      <h2>Transaction Notification</h2>
+      <p>
+      For every transaction notification Ayoconnect receives from MasterCard, Ayoconnect will forward the payload via a callback request to your callback endpoint.
+
+      Your callback endpoint must accept a POST method and return HTTP Status Code 200 to acknowledge the payload was received and processed successfully.
+
+      </p>
+      <h3>Security</h3>
+      <p>All callback requests from Ayoconnect will originate from following IP Addresses respective to the environments.
+
+        Clients are required to whitelist all of the following IP addresses for successfully receiving the callback notification.
+      </p>
+      
+      
+      | Envrironment  | IP / CIDR                                       |
+      |---------------|-------------------------------------------------|
+      | Sandbox       | <code>34.128.108.0/32</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>34.101.83.121</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>34.101.107.60</code>     |
+      | Production    | <code>34.101.108.126/32</code>&nbsp;&nbsp;<code>34.101.184.87</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>34.101.242.235</code>|
+      <br>
+          
+      | Parameter	     |Type    |Description             |Example   |
+      |------------------|--------|------------------------|-------------|
+      | <code>X-Authorization</code>  | string | Unique Hash generated using client_secret and merchant_code| secret : <code>ABCD</code><br>merchant code : <code>AY</code> <br>input : <code>ABCDAY</code> <br>hash : <code>$2a$12$rBv3GkRaa05etVVDAAIgRO0bwRjtRJ9IC/jNhbJNWuQZJKJHxkXv.</code>|
+      | <code>X-Content-Length</code> | number | length of body payload | <code>10</code> |
+          
+      <br>
+      <h3>Payload</h3>
+      <p>This is the sample payload that Ayoconnect will send to the callback URL.</p>
+      
+      <p><pre><code>{
+                  "transactionYear": "2023",
+                  "transactionDate": "0303",
+                  "transactionTime": "030303",
+                  "approvalCode": "123456",
+                  "transactionID": "GCMNFH8669330303030303",
+                  "customerID": "CUHTCrR4YQOG",
+                  "cardID": "CIjb5aE981V4",
+                  "cumulativeLimit": 1000,
+                  "availableBalance": 800,
+                  "amount": 1000,
+                  "responseCode": "00",
+                  "merchant": {
+                    "ID": "999999999999",
+                    "categoryCode": "5072",
+                    "name": "Warung Kopi",
+                    "stateOrCountryCode": "MO"
+                  }
+              }
+        </code></pre></p>
+        
+      <h3>Response code</h3>
+      <table>
+          <tr>
+              <th>
+                  <p>
+                      Code
+                  </p>
+              </th>
+              <th>
+                  <p>
+                      Description
+                  </p>
+              </th>
+              <th>
+                  <p>
+                    Action
+                  </p>
+              </th>
+          </tr>
+          <tr>
+              <td>
+                  00
+              </td>
+              <td>
+                  Approved or completed successfully
+              </td>
+              <td>
+                  <p>success</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>08</p>
+              </td>
+              <td>
+                  <p>
+                      Success - Honor with ID
+                  </p>
+              </td>
+              <td>
+                  <p>
+                      success</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      10</p>
+              </td>
+              <td>
+                  <p>
+                      Success - Partial Approval</p>
+              </td>
+              <td>
+                  <p>
+                      success</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      85</p>
+              </td>
+              <td>
+                  <p>
+                      Success - Not declined, Valid for all zero amount transactions.</p>
+              </td>
+              <td>
+                  <p>
+                      success</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      87</p>
+              </td>
+              <td>
+                  <p>
+                      Success - Purchase Amount Only, No Cash Back Allowed</p>
+              </td>
+              <td>
+                  <p>
+                      success</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      01</p>
+              </td>
+              <td>
+                  <p>
+                      Issuer Connection lost</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      03</p>
+              </td>
+              <td>
+                  <p>
+                      Invalid merchant</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      04</p>
+              </td>
+              <td>
+                  <p>
+                      Invalid merchant</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      05</p>
+              </td>
+              <td>
+                  <p>
+                      Invalid Card</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      06</p>
+              </td>
+              <td>
+                  <p>
+                      Partial Reversal</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      07</p>
+              </td>
+              <td>
+                  <p>
+                      Full Reversal</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      12</p>
+              </td>
+              <td>
+                  <p>
+                      Invalid transaction</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      13</p>
+              </td>
+              <td>
+                  <p>
+                      Invalid amount</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      14</p>
+              </td>
+              <td>
+                  <p>
+                      Invalid card number</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      15</p>
+              </td>
+              <td>
+                  <p>
+                      Invalid issuer</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      30</p>
+              </td>
+              <td>
+                  <p>
+                      card issuer does not recognize the transaction details being entered.</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      41</p>
+              </td>
+              <td>
+                  <p>
+                      Lost card</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      43</p>
+              </td>
+              <td>
+                  <p>
+                      Stolen card</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      51</p>
+              </td>
+              <td>
+                  <p>
+                      Insufficient funds/over credit limit</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      54</p>
+              </td>
+              <td>
+                  <p>
+                      Expired card</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      55</p>
+              </td>
+              <td>
+                  <p>
+                      Invalid PIN</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      57</p>
+              </td>
+              <td>
+                  <p>
+                      Transaction not permitted to issuer/cardholder</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      58</p>
+              </td>
+              <td>
+                  <p>
+                      Transaction not permitted to acquirer/terminal</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      61</p>
+              </td>
+              <td>
+                  <p>
+                      Exceeds withdrawal amount limit</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      62</p>
+              </td>
+              <td>
+                  <p>
+                      Issuer declined transaction as card has some restrictions</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      63</p>
+              </td>
+              <td>
+                  <p>
+                      Breach</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      65</p>
+              </td>
+              <td>
+                  <p>
+                      Exceeds withdrawal count limit(merchant should resubmit authentication)</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      70</p>
+              </td>
+              <td>
+                  <p>
+                      Contact Card Issuer</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      71</p>
+              </td>
+              <td>
+                  <p>
+                      PIN Not Changed</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      75</p>
+              </td>
+              <td>
+                  <p>
+                      Allowable number of PIN tries exceeded</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      76</p>
+              </td>
+              <td>
+                  <p>
+                      Invalid/nonexistent “To Account” specified</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      77</p>
+              </td>
+              <td>
+                  <p>
+                      Invalid/nonexistent “From Account” specified</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      78</p>
+              </td>
+              <td>
+                  <p>
+                      Invalid/nonexistent account specified (general)</p>
+              </td>
+              <td>
+                  <p>fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>81</p>
+              </td>
+              <td>
+                  <p>
+                      Domestic Debit Transaction Not Allowed</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+              <td>
+                  <p><br /></p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      84</p>
+              </td>
+              <td>
+                  <p>
+                      Connection lost</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      86</p>
+              </td>
+              <td>
+                  <p>
+                      PIN Validation Fail</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      88</p>
+              </td>
+              <td>
+                  <p>
+                      Connection lost</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      89</p>
+              </td>
+              <td>
+                  <p>
+                      Unacceptable PIN - Retry</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      91</p>
+              </td>
+              <td>
+                  <p>
+                      Error in MC or Issuer system</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p>
+                      92</p>
+              </td>
+              <td>
+                  <p>
+                      Connection lost</p>
+              </td>
+              <td>
+                  <p>
+                      fail</p>
+              </td>
+          </tr>
+      </table>
+   
+servers:
+  - url: https://dev.api.of.ayoconnect.id
+  - url: https://sandbox.api.of.ayoconnect.id
+paths:
+  /api/v1/cards/virtual/issue:
+    post:
+      summary: Issue card
+      description: This API is used to issue new cards to your customers
+      operationId: issueCardApi
+      parameters:
+        - name: Content-Type
+          in: header
+          description: >-
+            Mandatory. String represents indicate the media type of the resource
+            (e.g. application/JSON, application/pdf)
+          required: true
+          schema:
+            type: string
+          example: application/json
+        - name: Accept
+          in: header
+          description: >-
+            Mandatory. String represents indicate the media type of the resource
+            (e.g. application/json, application/pdf)
+          required: true
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          description: Authorization header. Only Bearer authentication is supported.
+          required: true
+          schema:
+            type: string
+            example: Bearer xxxx
+        - name: A-Correlation-ID
+          in: header
+          description: Unique, hyphen-separated alphanumeric string. We recommend the UUID algorithm, an industry standard that guarantees a high degree of uniqueness length 14 to 36 characters.
+          required: true
+          schema:
+            type: string
+            example: a16a1bd9-6411-48a8-aeed-94c383c481ea
+        - name: A-Merchant-Code
+          in: header
+          description: Unique Merchant Code provided by Ayoconnect.
+          required: true
+          schema:
+            type: string
+            example: AYOPOP
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - phone
+                - fullName
+                - email
+                - governmentID
+                - cardDetail
+              properties:
+                cardDetail:
+                  type: object
+                  description: Card deatils object
+                  properties:
+                    spendLimit:
+                      type: number
+                      description: Specifies the spending limit for the issuing card.
+                      example: 1000
+                    validity:
+                      type: number
+                      description: Specifies the validity in number of months for the issuing card. 1 to 24
+                      example: 1
+                email:
+                  type: string
+                  description: Customer email.
+                  example: test@example.com
+                fullName:
+                  type: string
+                  description: Customer name. Only contains alphabets. limited to length from 2-20
+                  example: john
+                governmentID:
+                  type: string
+                  description: Customer Driving license/passport/NIK/etc. minimum 5 and maximum 20 alphanumeric characters
+                  example: 320822267382a7fd6
+                phone:
+                  type: string
+                  description: Customer phone number. It should start with the your country code ( min 1 and max 3 digits ) followed by an hyphen (-) and phone number with at least 7 and at most 15 numeric characters. 7 ≤ length ≤ 15
+                  example: 62-999999999
+            examples:
+              Issue card API:
+                value:
+                  cardDetail:
+                    spendLimit: 1000
+                    validity: 1
+                  email: test@example.com
+                  fullName: john doe
+                  governmentID: 320822267382a7fd6
+                  phone: 61-999999999
+      responses:
+        '201':
+          description: Successful Card Issuance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type : number
+                    description: Unique code.
+                  message:
+                    type: string
+                    description: Description of the response code.
+                  responseTime:
+                    type: string
+                    description: Exact TimeStamp of the response in Unix Nanoseconds format.
+                  merchantCustomerID:
+                    type: string
+                    description: Unique customer ID
+                  cardDetail:
+                    type: object
+                    description: Card deatils
+                    properties:
+                      cardID:
+                        type: string
+                        description: Unique card ID
+                      maskedCard:
+                        type: string
+                        description: Masked card number
+                      expiry:
+                        type: string
+                        description: Expiry of card in YYMM format
+                      status:
+                        type: string
+                        description: Status of the card
+                      cumulativeLimit:
+                        type: number
+                        description: Initial limit of Card
+                      availableBalance:
+                        type: number
+                        description: Available balance on the card
+                      deactivatedBalance:
+                        type: number
+                        description: Remaining balance after card is deactivated
+        # '400':
+        #   description: Bad request
+        #   content:
+        #     application/json:
+        #       schema:
+        #         type: object
+        #         properties:
+        #           code:
+        #             type : number
+        #             description: Unique code.
+        #           message:
+        #             type: string
+        #             description: Description of the response code.
+        #           responseTime:
+        #             type: string
+        #             description: Exact TimeStamp of the response in Unix Nanoseconds format.
+        #           errors:
+        #             type: object
+        #             description: Errors
+        #             properties:
+        #               code:
+        #                 type: string
+        #                 description: Error code
+        #               message:
+        #                 type: string
+        #                 description: Error message
+        #               details:
+        #                 type: string
+        #                 description: Error details
+
+              examples:
+                Successful Card Issuance:
+                  value:
+                    code: 201
+                    message: created
+                    responseTime: '20211015060602'
+                    merchantCustomerID: MERCHANT_CUSTOMER_ID
+                    cardDetail: 
+                      cardID: CARD_ID
+                      maskedCard: '************9999'
+                      expiry: '2311'
+                      status: ACTIVE
+                      cumulativeLimit: 1000000
+                      availableBalance: 20000
+                      deactivatedBalance: 0
+
+                # Bad Request:
+                #   value:
+                #     code: 400
+                #     message: 'bad.request'
+                #     responseTime: '20211015060602'
+                #     errors:
+                #       code: 400
+                #       message: Bad Request
+                #       details: The request can't be processed by the server
+
+  /api/v1/cards/virtual/{cardID}:
+    get:
+      summary: View card
+      description: This API is used to get card information and card webview URL
+      operationId: viewCardApi
+      parameters:
+        - name: Content-Type
+          in: header
+          description: >-
+            Mandatory. String represents indicate the media type of the resource
+            (e.g. application/JSON, application/pdf)
+          required: true
+          schema:
+            type: string
+          example: application/json
+        - name: Accept
+          in: header
+          description: >-
+            Mandatory. String represents indicate the media type of the resource
+            (e.g. application/json, application/pdf)
+          required: true
+          schema:
+            type: string
+          example: application/json
+
+        - name: Authorization
+          in: header
+          description: Authorization header. Only Bearer authentication is supported.
+          required: true
+          schema:
+            type: string
+            example: Bearer xxxx
+
+        - name: A-Correlation-ID
+          in: header
+          description: Unique, hyphen-separated alphanumeric string. We recommend the UUID algorithm, an industry standard that guarantees a high degree of uniqueness length 14 to 36 characters.
+          required: true
+          schema:
+            type: string
+            example: a16a1bd9-6411-48a8-aeed-94c383c481ea
+
+        - name: A-Merchant-Code
+          in: header
+          description: Unique Merchant Code provided by Ayoconnect.
+          required: true
+          schema:
+            type: string
+            example: AYOPOP
+
+        - name: cardID
+          description: Unique Card ID returned in Issue card API
+          in: path
+          required: true
+          schema:
+            type: string
+            example: CIXXXXXXXX
+        
+        - name: merchantCustomerID
+          description: Unique Customer ID returned in Issue card API
+          in: query
+          required: true
+          schema:
+            type: string
+            example: CUXXXXXXXX
+
+      responses:
+        '200':
+          description: Successful Card Issuance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type : number
+                    description: Unique code.
+                  message:
+                    type: string
+                    description: Description of the response code.
+                  responseTime:
+                    type: string
+                    description: Exact TimeStamp of the response in Unix Nanoseconds format.
+                  merchantCustomerID:
+                    type: string
+                    description: Unique customer ID
+                  cardDetail:
+                    type: object
+                    description: Card deatils
+                    properties:
+                      cardID:
+                        type: string
+                        description: Unique card ID
+                      maskedCard:
+                        type: string
+                        description: Masked card number
+                      expiry:
+                        type: string
+                        description: Expiry of card in YYMM format
+                      status:
+                        type: string
+                        description: Status of the card
+                      cumulativeLimit:
+                        type: number
+                        description: Initial limit of Card
+                      availableBalance:
+                        type: number
+                        description: Available balance on the card
+                      deactivatedBalance:
+                        type: number
+                        description: Remaining balance after card is deactivated
+                  webview:
+                    type: object
+                    description: Card deatils
+                    properties:
+                      URI:
+                        type: string
+                        description: Unique card webview URI
+
+              examples:
+                Successful View card:
+                  value:
+                    code: 200
+                    message: ok
+                    responseTime: '20211015060602'
+                    merchantCustomerID: CUXXXXXXXX
+                    cardDetail: 
+                      cardID: CARD_ID
+                      maskedCard: '************9999'
+                      expiry: '2311'
+                      status: ACTIVE
+                      cumulativeLimit: 1000000
+                      availableBalance: 20000
+                      deactivatedBalance: 0
+                    webview:
+                      URI: 'https://url_to_view_card'
+
+    put:
+      summary: Modify card
+      description: This API is used to make modifications on an exisitng virtual card
+      operationId: modifySpendlimit
+      parameters:
+        - name: Content-Type
+          in: header
+          description: >-
+            Mandatory. String represents indicate the media type of the resource
+            (e.g. application/JSON, application/pdf)
+          required: true
+          schema:
+            type: string
+          example: application/json
+        - name: Accept
+          in: header
+          description: >-
+            Mandatory. String represents indicate the media type of the resource
+            (e.g. application/json, application/pdf)
+          required: true
+          schema:
+            type: string
+          example: application/json
+
+        - name: Authorization
+          in: header
+          description: Authorization header. Only Bearer authentication is supported.
+          required: true
+          schema:
+            type: string
+            example: Bearer xxxx
+
+        - name: A-Correlation-ID
+          in: header
+          description: Unique, hyphen-separated alphanumeric string. We recommend the UUID algorithm, an industry standard that guarantees a high degree of uniqueness length 14 to 36 characters.
+          required: true
+          schema:
+            type: string
+            example: a16a1bd9-6411-48a8-aeed-94c383c481ea
+
+        - name: A-Merchant-Code
+          in: header
+          description: Unique Merchant Code provided by Ayoconnect.
+          required: true
+          schema:
+            type: string
+            example: AYOPOP
+
+        - name: cardID
+          description: Unique Card ID returned in Issue card API
+          in: path
+          required: true
+          schema:
+            type: string
+            example: CIXXXXXXXX
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cardDetail:
+                  type: object
+                  properties:
+                    spendLimit:
+                      type: number
+                      example: 5000
+                    status:
+                      type: string
+                      example: "ACTIVE/INACTIVE/DEACTIVATE"
+                    validity:
+                      type: number
+                      example: 24
+                merchantCustomerID:
+                  type: string
+                  example: CIXXXXXXXXXX
+            
+            examples:
+              Modify card:
+                value:
+                  cardDetail:
+                    spendLimit: 5000
+                    validity: 1
+                    staus: ACTIVE
+                  merchantCustomerID: CUXXXXXXXXXX
+
+      responses:
+        '200':
+          description: Successful Card Modify
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type : number
+                    description: Unique code.
+                  message:
+                    type: string
+                    description: Description of the response code.
+                  responseTime:
+                    type: string
+                    description: Exact TimeStamp of the response in Unix Nanoseconds format.
+                  merchantCustomerID:
+                    type: string
+                    description: Unique customer ID
+                  cardDetail:
+                    type: object
+                    description: Card deatils
+                    properties:
+                      cardID:
+                        type: string
+                        description: Unique card ID
+                      maskedCard:
+                        type: string
+                        description: Masked card number
+                      expiry:
+                        type: string
+                        description: Expiry of card in YYMM format
+                      status:
+                        type: string
+                        description: Status of the card
+                      cumulativeLimit:
+                        type: number
+                        description: Initial limit of Card
+                      availableBalance:
+                        type: number
+                        description: Available balance on the card
+                      deactivatedBalance:
+                        type: number
+                        description: Remaining balance after card is deactivated
+
+              examples:
+                Successful Modify card:
+                  value:
+                    code: 200
+                    message: ok
+                    responseTime: '20211015060602'
+                    merchantCustomerID: CUXXXXXXXX
+                    cardDetail: 
+                      cardID: CARD_ID
+                      maskedCard: '************9999'
+                      expiry: '2311'
+                      status: ACTIVE
+                      cumulativeLimit: 1000000
+                      availableBalance: 20000
+                      deactivatedBalance: 0
+  
+  /api/v1/cards/virtual/customer/{phone}:
+    get:
+      summary: Get cards
+      description: This API will fetch all cards that belong to the specified customer
+      operationId: getCustomerSCardsApi
+      parameters:
+        - name: Content-Type
+          in: header
+          description: >-
+            Mandatory. String represents indicate the media type of the resource
+            (e.g. application/JSON, application/pdf)
+          required: true
+          schema:
+            type: string
+          example: application/json
+        - name: Accept
+          in: header
+          description: >-
+            Mandatory. String represents indicate the media type of the resource
+            (e.g. application/json, application/pdf)
+          required: true
+          schema:
+            type: string
+          example: application/json
+
+        - name: Authorization
+          in: header
+          description: Authorization header. Only Bearer authentication is supported.
+          required: true
+          schema:
+            type: string
+            example: Bearer xxxx
+
+        - name: A-Correlation-ID
+          in: header
+          description: Unique, hyphen-separated alphanumeric string. We recommend the UUID algorithm, an industry standard that guarantees a high degree of uniqueness length 14 to 36 characters.
+          required: true
+          schema:
+            type: string
+            example: a16a1bd9-6411-48a8-aeed-94c383c481ea
+
+        - name: A-Merchant-Code
+          in: header
+          description: Unique Merchant Code provided by Ayoconnect.
+          required: true
+          schema:
+            type: string
+            example: AYOPOP
+
+        - name: phone
+          description: Customer phone number used to issue a Card.
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 62-9999999999
+            
+      responses:
+        '200':
+          description: Successful Card Issuance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type : number
+                    description: Unique code.
+                  message:
+                    type: string
+                    description: Description of the response code.
+                  responseTime:
+                    type: string
+                    description: Exact TimeStamp of the response in Unix Nanoseconds format.
+                  merchantCustomerID:
+                    type: string
+                    description: Unique customer ID
+                  cardDetails:
+                    type: array
+                    description: List of cards issued to customer
+                    items:
+                      type: object
+                      description: Card details
+                      properties:
+                        cardID:
+                          type: string
+                          description: Unique card ID
+                        maskedCard:
+                          type: string
+                          description: Masked card number
+                        expiry:
+                          type: string
+                          description: Expiry of card in YYMM format
+                        status:
+                          type: string
+                          description: Status of the card
+                        cumulativeLimit:
+                          type: number
+                          description: Initial limit of Card
+                        availableBalance:
+                          type: number
+                          description: Available balance on the card
+                        deactivatedBalance:
+                          type: number
+                          description: Remaining balance after card is deactivated  
+              examples:
+                Successful Get cards:
+                  value:
+                    code: 200
+                    message: ok
+                    responseTime: '20211015060602'
+                    merchantCustomerID: CUXXXXXXXX
+                    cardDetail: 
+                      cardID: CARD_ID
+                      maskedCard: '************9999'
+                      expiry: '2311'
+                      status: ACTIVE
+                      cumulativeLimit: 1000000
+                      availableBalance: 20000
+                      deactivatedBalance: 0
+                      
+  # /api/v1/cards/virtual/in/cards/virtual/trx:
+  #   post:
+  #     summary: Get cards
+  #     description: This API will fetch all cards that belong to the specified customer
+  #     operationId: getCustomerSCardsApi
+  #     parameters:
+  #       - name: Content-Type
+  #         in: header
+  #         description: >-
+  #           Mandatory. String represents indicate the media type of the resource
+  #           (e.g. application/JSON, application/pdf)
+  #         required: true
+  #         schema:
+  #           type: string
+  #         example: application/json
+  #       - name: Accept
+  #         in: header
+  #         description: >-
+  #           Mandatory. String represents indicate the media type of the resource
+  #           (e.g. application/json, application/pdf)
+  #         required: true
+  #         schema:
+  #           type: string
+  #         example: application/json
+
+  #       - name: Authorization
+  #         in: header
+  #         description: Authorization header. Only Bearer authentication is supported.
+  #         required: true
+  #         schema:
+  #           type: string
+  #           example: Bearer xxxx
+
+  #       - name: A-Correlation-ID
+  #         in: header
+  #         description: Unique, hyphen-separated alphanumeric string. We recommend the UUID algorithm, an industry standard that guarantees a high degree of uniqueness length 14 to 36 characters.
+  #         required: true
+  #         schema:
+  #           type: string
+  #           example: a16a1bd9-6411-48a8-aeed-94c383c481ea
+
+  #       - name: A-Merchant-Code
+  #         in: header
+  #         description: Unique Merchant Code provided by Ayoconnect.
+  #         required: true
+  #         schema:
+  #           type: string
+  #           example: AYOPOP
+
+  #       - name: phone
+  #         description: Customer phone number used to issue a Card.
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: string
+  #           example: 62-9999999999
+            
+  #     responses:
+  #       '200':
+  #         description: Successful Card Issuance
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 code:
+  #                   type : number
+  #                   description: Unique code.
+  #                 message:
+  #                   type: string
+  #                   description: Description of the response code.
+  #                 responseTime:
+  #                   type: string
+  #                   description: Exact TimeStamp of the response in Unix Nanoseconds format.
+  #                 merchantCustomerID:
+  #                   type: string
+  #                   description: Unique customer ID
+  #                 cardDetails:
+  #                   type: array
+  #                   description: List of cards issued to customer
+  #                   items:
+  #                     type: object
+  #                     description: Card details
+  #                     properties:
+  #                       cardID:
+  #                         type: string
+  #                         description: Unique card ID
+  #                       maskedCard:
+  #                         type: string
+  #                         description: Masked card number
+  #                       expiry:
+  #                         type: string
+  #                         description: Expiry of card in YYMM format
+  #                       status:
+  #                         type: string
+  #                         description: Status of the card
+  #                       cumulativeLimit:
+  #                         type: number
+  #                         description: Initial limit of Card
+  #                       availableBalance:
+  #                         type: number
+  #                         description: Available balance on the card
+  #                       deactivatedBalance:
+  #                         type: number
+  #                         description: Remaining balance after card is deactivated  
+  #             examples:
+  #               Successful Get cards:
+  #                 value:
+  #                   code: 200
+  #                   message: ok
+  #                   responseTime: '20211015060602'
+  #                   merchantCustomerID: CUXXXXXXXX
+  #                   cardDetail: 
+  #                     cardID: CARD_ID
+  #                     maskedCard: '************9999'
+  #                     expiry: '2311'
+  #                     status: ACTIVE
+  #                     cumulativeLimit: 1000000
+  #                     availableBalance: 20000
+  #                     deactivatedBalance: 0                      
+                      
+                      
+  # /api/v1/vc/private/cards:
+  #   put:
+  #     summary: Merchant Block / Unblock API
+  #     description: Merchant Block / Unblock API
+  #     operationId: merchantBlockUnblockApi
+  #     parameters:
+  #       - name: A-Merchant-Code
+  #         in: header
+  #         schema:
+  #           type: string
+  #           example: AMAZON
+  #       - name: A-Correlation-ID
+  #         in: header
+  #         schema:
+  #           type: string
+  #           example: 1588e6f5-7849-403c-84a3-f0f21f1a5ee3
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               merchantCode:
+  #                 type: string
+  #                 example: AMAZON
+  #               status:
+  #                 type: number
+  #                 example: 1
+  #           examples:
+  #             Merchant Block / Unblock API:
+  #               value:
+  #                 merchantCode: AMAZON
+  #                 status: 1
+  #     responses:
+  #       '200':
+  #         description: ''
+  # /api/v1/vc/private/cards/notify-expiry:
+  #   post:
+  #     summary: Expired cards Callback API
+  #     description: Expired cards Callback API
+  #     operationId: expiredCardsCallbackApi
+  #     parameters:
+  #       - name: now
+  #         in: query
+  #         schema:
+  #           type: string
+  #           example: 'true'
+  #     responses:
+  #       '200':
+  #         description: ''
+  # /upload:
+  #   post:
+  #     summary: Recon Upload API
+  #     description: Recon Upload API
+  #     operationId: reconUploadApi
+  #     requestBody:
+  #       content:
+  #         multipart/form-data:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               file:
+  #                 type: string
+  #                 format: binary
+  #     responses:
+  #       '200':
+  #         description: ''
+   # /api/v1/cards/virtual/CIf91NTvc875:
+  #   put:
+  #     summary: Modify - validity
+  #     description: Modify - validity
+  #     operationId: modifyValidity
+  #     parameters:
+  #       - name: token
+  #         in: header
+  #         schema:
+  #           type: string
+  #           example: Bearer 7wZ71SgMZegoLcJg8F9Q4X9lvOzp
+  #       - name: A-Correlation-Id
+  #         in: header
+  #         schema:
+  #           type: string
+  #           example: d49addb3-c3c0-40c2-b88d-06160616a2fe
+  #       - name: A-Merchant-Code
+  #         in: header
+  #         schema:
+  #           type: string
+  #           example: LABSQA
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               cardDetail:
+  #                 type: object
+  #                 properties:
+  #                   validity:
+  #                     type: number
+  #                     example: 3
+  #               merchantCustomerID:
+  #                 type: string
+  #                 example: CUJwGH7k2RrL
+  #           examples:
+  #             Modify - validity:
+  #               value:
+  #                 cardDetail:
+  #                   validity: 3
+  #                 merchantCustomerID: CUJwGH7k2RrL
+  #     responses:
+  #       '200':
+  #         description: ''
+  # /api/v1/cards/virtual/in/cards/virtual/trx:
+  #   post:
+  #     summary: Simulate transaction API
+  #     description: Simulate transaction API
+  #     operationId: simulateTransactionApi
+  #     parameters:
+  #       - name: A-Merchant-Code
+  #         in: header
+  #         schema:
+  #           type: string
+  #           example: AYBPJS
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               amount:
+  #                 type: number
+  #                 example: 1000
+  #               card:
+  #                 type: string
+  #                 example: CI9yEx7gx5S5
+  #           examples:
+  #             Simulate transaction API:
+  #               value:
+  #                 amount: 1000
+  #                 card: CI9yEx7gx5S5
+  #     responses:
+  #       '200':
+  #         description: ''
+  # /api/v1/cards/virtual/event/notification:
+  #   post:
+  #     summary: Event Notification
+  #     description: Event Notification
+  #     operationId: eventNotification
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: array
+  #             items:
+  #               type: object
+  #               properties:
+  #                 content:
+  #                   type: object
+  #                   properties:
+  #                     advice:
+  #                       type: object
+  #                       properties:
+  #                         reasonCode:
+  #                           type: string
+  #                           example: '650'
+  #                     authorizationCode:
+  #                       type: string
+  #                       example: '666101'
+  #                     banknetReferenceNumber:
+  #                       type: string
+  #                       example: jkq111
+  #                     billingAmount:
+  #                       type: number
+  #                       example: 100000
+  #                     billingCurrencyCode:
+  #                       type: string
+  #                       example: IDR
+  #                     cardHolderTransactionTypeCode:
+  #                       type: string
+  #                       example: '00'
+  #                     financialNetworkCode:
+  #                       type: string
+  #                       example: MPG
+  #                     inControlOnBehalfServiceResult:
+  #                       type: object
+  #                       properties:
+  #                         rcnServiceResultCode:
+  #                           nullable: true
+  #                           example: null
+  #                         vcnServiceResultCode:
+  #                           type: string
+  #                           example: V
+  #                     merchant:
+  #                       type: object
+  #                       properties:
+  #                         categoryCode:
+  #                           type: string
+  #                           example: '5072'
+  #                         city:
+  #                           type: string
+  #                           example: O'Fallon
+  #                         merchantId:
+  #                           type: string
+  #                           example: '88888888888'
+  #                         name:
+  #                           type: string
+  #                           example: LABS Test
+  #                         stateOrCountryCode:
+  #                           type: string
+  #                           example: MO
+  #                     messageTypeIndicator:
+  #                       type: string
+  #                       example: '0110'
+  #                     originalMessage:
+  #                       type: object
+  #                       properties:
+  #                         messageTypeIndicator:
+  #                           type: string
+  #                           example: '00'
+  #                         systemTraceAuditNumber:
+  #                           type: string
+  #                           example: '11174'
+  #                         transmissionRawDateTime:
+  #                           type: string
+  #                           example: '1029112800'
+  #                     posTransactionStatus:
+  #                       type: string
+  #                       example: '0'
+  #                     purchaseRequest:
+  #                       type: object
+  #                       properties:
+  #                         companyGuid:
+  #                           type: string
+  #                           example: >-
+  #                             SENTTY9951972A6FC0206CB494B560E5E6DC5D02A2BD21D89612EF4A18358ECC777DCF1494921797
+  #                         companyId:
+  #                           type: number
+  #                           example: 233191
+  #                         issuerGuid:
+  #                           type: string
+  #                           example: >-
+  #                             SENTTY5E4C4B4E0D1BF5991E64A1E0745F40A85B2510CE48EB537011DCED3C483669D61494938440
+  #                         purchaseRequestId:
+  #                           type: number
+  #                           example: 19529917
+  #                         rcnAlias:
+  #                           type: string
+  #                           example: Travel Expense RCN
+  #                     realPaymentCard:
+  #                       type: object
+  #                       properties:
+  #                         expiryMonth:
+  #                           type: string
+  #                           example: '01'
+  #                         expiryYear:
+  #                           type: string
+  #                           example: '25'
+  #                         number:
+  #                           type: string
+  #                           example: '************0038'
+  #                     replacementAmounts:
+  #                       type: object
+  #                       properties:
+  #                         billingAmount:
+  #                           nullable: true
+  #                           example: null
+  #                         settlementAmount:
+  #                           nullable: true
+  #                           example: null
+  #                         transactionAmount:
+  #                           nullable: true
+  #                           example: null
+  #                     responseCode:
+  #                       type: string
+  #                       example: '00'
+  #                     settlementDate:
+  #                       type: string
+  #                       example: '0301'
+  #                     systemTraceAuditNumber:
+  #                       type: string
+  #                       example: '105101'
+  #                     traceId:
+  #                       nullable: true
+  #                       example: null
+  #                     transactionAmount:
+  #                       type: number
+  #                       example: 100000
+  #                     transactionCurrencyCode:
+  #                       type: string
+  #                       example: IDR
+  #                     transmissionRawDate:
+  #                       type: string
+  #                       example: '0704'
+  #                     transmissionRawTime:
+  #                       type: string
+  #                       example: '005202'
+  #                     virtualPaymentCard:
+  #                       type: object
+  #                       properties:
+  #                         expiryMonth:
+  #                           type: string
+  #                           example: '07'
+  #                         expiryYear:
+  #                           type: string
+  #                           example: '23'
+  #                         number:
+  #                           type: string
+  #                           example: '************2657'
+  #                 createdTimestamp:
+  #                   type: string
+  #                   example: '2023-07-04T00:52:11.268Z'
+  #                 pushStatus:
+  #                   type: string
+  #                   example: DELIVERED
+  #                 subject:
+  #                   type: string
+  #                   example: PAYMENT_AUTHORIZATION
+  #                 subscriptionName:
+  #                   type: string
+  #                   example: LABS Test
+  #             example:
+  #               - content:
+  #                   advice:
+  #                     reasonCode: '650'
+  #                   authorizationCode: '666101'
+  #                   banknetReferenceNumber: jkq111
+  #                   billingAmount: 100000
+  #                   billingCurrencyCode: IDR
+  #                   cardHolderTransactionTypeCode: '00'
+  #                   financialNetworkCode: MPG
+  #                   inControlOnBehalfServiceResult:
+  #                     rcnServiceResultCode: null
+  #                     vcnServiceResultCode: V
+  #                   merchant:
+  #                     categoryCode: '5072'
+  #                     city: O'Fallon
+  #                     merchantId: '88888888888'
+  #                     name: LABS Test
+  #                     stateOrCountryCode: MO
+  #                   messageTypeIndicator: '0110'
+  #                   originalMessage:
+  #                     messageTypeIndicator: '00'
+  #                     systemTraceAuditNumber: '11174'
+  #                     transmissionRawDateTime: '1029112800'
+  #                   posTransactionStatus: '0'
+  #                   purchaseRequest:
+  #                     companyGuid: >-
+  #                       SENTTY9951972A6FC0206CB494B560E5E6DC5D02A2BD21D89612EF4A18358ECC777DCF1494921797
+  #                     companyId: 233191
+  #                     issuerGuid: >-
+  #                       SENTTY5E4C4B4E0D1BF5991E64A1E0745F40A85B2510CE48EB537011DCED3C483669D61494938440
+  #                     purchaseRequestId: 19529917
+  #                     rcnAlias: Travel Expense RCN
+  #                   realPaymentCard:
+  #                     expiryMonth: '01'
+  #                     expiryYear: '25'
+  #                     number: '************0038'
+  #                   replacementAmounts:
+  #                     billingAmount: null
+  #                     settlementAmount: null
+  #                     transactionAmount: null
+  #                   responseCode: '00'
+  #                   settlementDate: '0301'
+  #                   systemTraceAuditNumber: '105101'
+  #                   traceId: null
+  #                   transactionAmount: 100000
+  #                   transactionCurrencyCode: IDR
+  #                   transmissionRawDate: '0704'
+  #                   transmissionRawTime: '005202'
+  #                   virtualPaymentCard:
+  #                     expiryMonth: '07'
+  #                     expiryYear: '23'
+  #                     number: '************2657'
+  #                 createdTimestamp: '2023-07-04T00:52:11.268Z'
+  #                 pushStatus: DELIVERED
+  #                 subject: PAYMENT_AUTHORIZATION
+  #                 subscriptionName: LABS Test
+  #           examples:
+  #             Event Notification:
+  #               value:
+  #                 - content:
+  #                     advice:
+  #                       reasonCode: '650'
+  #                     authorizationCode: '666101'
+  #                     banknetReferenceNumber: jkq111
+  #                     billingAmount: 100000
+  #                     billingCurrencyCode: IDR
+  #                     cardHolderTransactionTypeCode: '00'
+  #                     financialNetworkCode: MPG
+  #                     inControlOnBehalfServiceResult:
+  #                       rcnServiceResultCode: null
+  #                       vcnServiceResultCode: V
+  #                     merchant:
+  #                       categoryCode: '5072'
+  #                       city: O'Fallon
+  #                       merchantId: '88888888888'
+  #                       name: LABS Test
+  #                       stateOrCountryCode: MO
+  #                     messageTypeIndicator: '0110'
+  #                     originalMessage:
+  #                       messageTypeIndicator: '00'
+  #                       systemTraceAuditNumber: '11174'
+  #                       transmissionRawDateTime: '1029112800'
+  #                     posTransactionStatus: '0'
+  #                     purchaseRequest:
+  #                       companyGuid: >-
+  #                         SENTTY9951972A6FC0206CB494B560E5E6DC5D02A2BD21D89612EF4A18358ECC777DCF1494921797
+  #                       companyId: 233191
+  #                       issuerGuid: >-
+  #                         SENTTY5E4C4B4E0D1BF5991E64A1E0745F40A85B2510CE48EB537011DCED3C483669D61494938440
+  #                       purchaseRequestId: 19529917
+  #                       rcnAlias: Travel Expense RCN
+  #                     realPaymentCard:
+  #                       expiryMonth: '01'
+  #                       expiryYear: '25'
+  #                       number: '************0038'
+  #                     replacementAmounts:
+  #                       billingAmount: null
+  #                       settlementAmount: null
+  #                       transactionAmount: null
+  #                     responseCode: '00'
+  #                     settlementDate: '0301'
+  #                     systemTraceAuditNumber: '105101'
+  #                     traceId: null
+  #                     transactionAmount: 100000
+  #                     transactionCurrencyCode: IDR
+  #                     transmissionRawDate: '0704'
+  #                     transmissionRawTime: '005202'
+  #                     virtualPaymentCard:
+  #                       expiryMonth: '07'
+  #                       expiryYear: '23'
+  #                       number: '************2657'
+  #                   createdTimestamp: '2023-07-04T00:52:11.268Z'
+  #                   pushStatus: DELIVERED
+  #                   subject: PAYMENT_AUTHORIZATION
+  #                   subscriptionName: LABS Test
+  #     responses:
+  #       '200':
+  #         description: ''
+tags: []
