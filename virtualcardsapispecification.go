@@ -797,9 +797,9 @@ func New(opts ...SDKOption) *VirtualCardsAPISpecification {
 		sdkConfiguration: sdkConfiguration{
 			Language:          "go",
 			OpenAPIDocVersion: "1.6.7",
-			SDKVersion:        "0.1.0",
-			GenVersion:        "2.173.0",
-			UserAgent:         "speakeasy-sdk/go 0.1.0 2.173.0 1.6.7 github.com/speakeasy-sdks/GDROID-sample-sdk",
+			SDKVersion:        "0.2.0",
+			GenVersion:        "2.181.1",
+			UserAgent:         "speakeasy-sdk/go 0.2.0 2.181.1 1.6.7 github.com/speakeasy-sdks/GDROID-sample-sdk",
 		},
 	}
 	for _, opt := range opts {
@@ -869,12 +869,12 @@ func (s *VirtualCardsAPISpecification) GetCustomerSCardsAPI(ctx context.Context,
 	case httpRes.StatusCode == 200:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out operations.GetCustomerSCardsAPI200ApplicationJSON
+			var out operations.GetCustomerSCardsAPIResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.GetCustomerSCardsAPI200ApplicationJSONObject = &out
+			res.Object = &out
 		default:
 			return nil, sdkerrors.NewSDKError(fmt.Sprintf("unknown content-type received: %s", contentType), httpRes.StatusCode, string(rawBody), httpRes)
 		}
@@ -943,12 +943,12 @@ func (s *VirtualCardsAPISpecification) IssueCardAPI(ctx context.Context, aCorrel
 	case httpRes.StatusCode == 201:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out operations.IssueCardAPI201ApplicationJSON
+			var out operations.IssueCardAPIResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.IssueCardAPI201ApplicationJSONObject = &out
+			res.Object = &out
 		default:
 			return nil, sdkerrors.NewSDKError(fmt.Sprintf("unknown content-type received: %s", contentType), httpRes.StatusCode, string(rawBody), httpRes)
 		}
@@ -1021,12 +1021,12 @@ func (s *VirtualCardsAPISpecification) ModifySpendlimit(ctx context.Context, aCo
 	case httpRes.StatusCode == 200:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out operations.ModifySpendlimit200ApplicationJSON
+			var out operations.ModifySpendlimitResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.ModifySpendlimit200ApplicationJSONObject = &out
+			res.Object = &out
 		default:
 			return nil, sdkerrors.NewSDKError(fmt.Sprintf("unknown content-type received: %s", contentType), httpRes.StatusCode, string(rawBody), httpRes)
 		}
@@ -1096,12 +1096,12 @@ func (s *VirtualCardsAPISpecification) ViewCardAPI(ctx context.Context, aCorrela
 	case httpRes.StatusCode == 200:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out operations.ViewCardAPI200ApplicationJSON
+			var out operations.ViewCardAPIResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.ViewCardAPI200ApplicationJSONObject = &out
+			res.Object = &out
 		default:
 			return nil, sdkerrors.NewSDKError(fmt.Sprintf("unknown content-type received: %s", contentType), httpRes.StatusCode, string(rawBody), httpRes)
 		}

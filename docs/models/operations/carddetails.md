@@ -1,6 +1,6 @@
-# ModifySpendlimit200ApplicationJSONCardDetail
+# CardDetails
 
-Card deatils
+Card details
 
 
 ## Fields

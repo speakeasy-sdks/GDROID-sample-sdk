@@ -15,7 +15,7 @@ It has been generated successfully based on your OpenAPI spec. However, it is no
 - [ ] 🎁 Publish your SDK to package managers by [configuring automatic publishing](https://www.speakeasyapi.dev/docs/productionize-sdks/publish-sdks)
 - [ ] ✨ When ready to productionize, delete this section from the README
 <!-- Start SDK Installation -->
-# SDK Installation
+## SDK Installation
 
 ```bash
 go get github.com/speakeasy-sdks/GDROID-sample-sdk
@@ -24,8 +24,6 @@ go get github.com/speakeasy-sdks/GDROID-sample-sdk
 
 ## SDK Example Usage
 <!-- Start SDK Example Usage -->
-
-
 ```go
 package main
 
@@ -45,12 +43,12 @@ func main() {
 	var phone string = "62-9999999999"
 
 	ctx := context.Background()
-	res, err := s.VirtualCardsAPISpecification.GetCustomerSCardsAPI(ctx, aCorrelationID, aMerchantCode, phone)
+	res, err := s.GetCustomerSCardsAPI(ctx, aCorrelationID, aMerchantCode, phone)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if res.GetCustomerSCardsAPI200ApplicationJSONObject != nil {
+	if res.Object != nil {
 		// handle response
 	}
 }
@@ -59,9 +57,9 @@ func main() {
 <!-- End SDK Example Usage -->
 
 <!-- Start SDK Available Operations -->
-# Available Resources and Operations
+## Available Resources and Operations
 
-## [VirtualCardsAPISpecification SDK](docs/sdks/virtualcardsapispecification/README.md)
+### [VirtualCardsAPISpecification SDK](docs/sdks/virtualcardsapispecification/README.md)
 
 * [GetCustomerSCardsAPI](docs/sdks/virtualcardsapispecification/README.md#getcustomerscardsapi) - Get cards
 * [IssueCardAPI](docs/sdks/virtualcardsapispecification/README.md#issuecardapi) - Issue card
@@ -71,16 +69,12 @@ func main() {
 
 <!-- Start Dev Containers -->
 
-
-
 <!-- End Dev Containers -->
 
 <!-- Start Error Handling -->
 # Error Handling
 
 Handling errors in your SDK should largely match your expectations.  All operations return a response object or an error, they will never return both.  When specified by the OpenAPI spec document, the SDK will return the appropriate subclass.
-
-
 <!-- End Error Handling -->
 
 <!-- Start Server Selection -->
@@ -96,7 +90,6 @@ You can override the default server globally using the `WithServerIndex` option 
 | 1 | `https://sandbox.api.of.ayoconnect.id` | None |
 
 For example:
-
 
 ```go
 package main
@@ -119,12 +112,12 @@ func main() {
 	var phone string = "62-9999999999"
 
 	ctx := context.Background()
-	res, err := s.VirtualCardsAPISpecification.GetCustomerSCardsAPI(ctx, aCorrelationID, aMerchantCode, phone)
+	res, err := s.GetCustomerSCardsAPI(ctx, aCorrelationID, aMerchantCode, phone)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if res.GetCustomerSCardsAPI200ApplicationJSONObject != nil {
+	if res.Object != nil {
 		// handle response
 	}
 }
@@ -135,7 +128,6 @@ func main() {
 ## Override Server URL Per-Client
 
 The default server can also be overridden globally using the `WithServerURL` option when initializing the SDK client instance. For example:
-
 
 ```go
 package main
@@ -158,12 +150,12 @@ func main() {
 	var phone string = "62-9999999999"
 
 	ctx := context.Background()
-	res, err := s.VirtualCardsAPISpecification.GetCustomerSCardsAPI(ctx, aCorrelationID, aMerchantCode, phone)
+	res, err := s.GetCustomerSCardsAPI(ctx, aCorrelationID, aMerchantCode, phone)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if res.GetCustomerSCardsAPI200ApplicationJSONObject != nil {
+	if res.Object != nil {
 		// handle response
 	}
 }

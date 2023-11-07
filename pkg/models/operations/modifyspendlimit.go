@@ -6,27 +6,27 @@ import (
 	"net/http"
 )
 
-type ModifySpendlimitRequestBodyCardDetail struct {
+type ModifySpendlimitCardDetail struct {
 	SpendLimit *float64 `json:"spendLimit,omitempty"`
 	Status     *string  `json:"status,omitempty"`
 	Validity   *float64 `json:"validity,omitempty"`
 }
 
-func (o *ModifySpendlimitRequestBodyCardDetail) GetSpendLimit() *float64 {
+func (o *ModifySpendlimitCardDetail) GetSpendLimit() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.SpendLimit
 }
 
-func (o *ModifySpendlimitRequestBodyCardDetail) GetStatus() *string {
+func (o *ModifySpendlimitCardDetail) GetStatus() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Status
 }
 
-func (o *ModifySpendlimitRequestBodyCardDetail) GetValidity() *float64 {
+func (o *ModifySpendlimitCardDetail) GetValidity() *float64 {
 	if o == nil {
 		return nil
 	}
@@ -34,11 +34,11 @@ func (o *ModifySpendlimitRequestBodyCardDetail) GetValidity() *float64 {
 }
 
 type ModifySpendlimitRequestBody struct {
-	CardDetail         *ModifySpendlimitRequestBodyCardDetail `json:"cardDetail,omitempty"`
-	MerchantCustomerID *string                                `json:"merchantCustomerID,omitempty"`
+	CardDetail         *ModifySpendlimitCardDetail `json:"cardDetail,omitempty"`
+	MerchantCustomerID *string                     `json:"merchantCustomerID,omitempty"`
 }
 
-func (o *ModifySpendlimitRequestBody) GetCardDetail() *ModifySpendlimitRequestBodyCardDetail {
+func (o *ModifySpendlimitRequestBody) GetCardDetail() *ModifySpendlimitCardDetail {
 	if o == nil {
 		return nil
 	}
@@ -90,8 +90,8 @@ func (o *ModifySpendlimitRequest) GetRequestBody() *ModifySpendlimitRequestBody 
 	return o.RequestBody
 }
 
-// ModifySpendlimit200ApplicationJSONCardDetail - Card deatils
-type ModifySpendlimit200ApplicationJSONCardDetail struct {
+// ModifySpendlimitResponseCardDetail - Card deatils
+type ModifySpendlimitResponseCardDetail struct {
 	// Available balance on the card
 	AvailableBalance *float64 `json:"availableBalance,omitempty"`
 	// Unique card ID
@@ -108,59 +108,59 @@ type ModifySpendlimit200ApplicationJSONCardDetail struct {
 	Status *string `json:"status,omitempty"`
 }
 
-func (o *ModifySpendlimit200ApplicationJSONCardDetail) GetAvailableBalance() *float64 {
+func (o *ModifySpendlimitResponseCardDetail) GetAvailableBalance() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.AvailableBalance
 }
 
-func (o *ModifySpendlimit200ApplicationJSONCardDetail) GetCardID() *string {
+func (o *ModifySpendlimitResponseCardDetail) GetCardID() *string {
 	if o == nil {
 		return nil
 	}
 	return o.CardID
 }
 
-func (o *ModifySpendlimit200ApplicationJSONCardDetail) GetCumulativeLimit() *float64 {
+func (o *ModifySpendlimitResponseCardDetail) GetCumulativeLimit() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.CumulativeLimit
 }
 
-func (o *ModifySpendlimit200ApplicationJSONCardDetail) GetDeactivatedBalance() *float64 {
+func (o *ModifySpendlimitResponseCardDetail) GetDeactivatedBalance() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.DeactivatedBalance
 }
 
-func (o *ModifySpendlimit200ApplicationJSONCardDetail) GetExpiry() *string {
+func (o *ModifySpendlimitResponseCardDetail) GetExpiry() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Expiry
 }
 
-func (o *ModifySpendlimit200ApplicationJSONCardDetail) GetMaskedCard() *string {
+func (o *ModifySpendlimitResponseCardDetail) GetMaskedCard() *string {
 	if o == nil {
 		return nil
 	}
 	return o.MaskedCard
 }
 
-func (o *ModifySpendlimit200ApplicationJSONCardDetail) GetStatus() *string {
+func (o *ModifySpendlimitResponseCardDetail) GetStatus() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Status
 }
 
-// ModifySpendlimit200ApplicationJSON - Successful Card Modify
-type ModifySpendlimit200ApplicationJSON struct {
+// ModifySpendlimitResponseBody - Successful Card Modify
+type ModifySpendlimitResponseBody struct {
 	// Card deatils
-	CardDetail *ModifySpendlimit200ApplicationJSONCardDetail `json:"cardDetail,omitempty"`
+	CardDetail *ModifySpendlimitResponseCardDetail `json:"cardDetail,omitempty"`
 	// Unique code.
 	Code *float64 `json:"code,omitempty"`
 	// Unique customer ID
@@ -171,35 +171,35 @@ type ModifySpendlimit200ApplicationJSON struct {
 	ResponseTime *string `json:"responseTime,omitempty"`
 }
 
-func (o *ModifySpendlimit200ApplicationJSON) GetCardDetail() *ModifySpendlimit200ApplicationJSONCardDetail {
+func (o *ModifySpendlimitResponseBody) GetCardDetail() *ModifySpendlimitResponseCardDetail {
 	if o == nil {
 		return nil
 	}
 	return o.CardDetail
 }
 
-func (o *ModifySpendlimit200ApplicationJSON) GetCode() *float64 {
+func (o *ModifySpendlimitResponseBody) GetCode() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.Code
 }
 
-func (o *ModifySpendlimit200ApplicationJSON) GetMerchantCustomerID() *string {
+func (o *ModifySpendlimitResponseBody) GetMerchantCustomerID() *string {
 	if o == nil {
 		return nil
 	}
 	return o.MerchantCustomerID
 }
 
-func (o *ModifySpendlimit200ApplicationJSON) GetMessage() *string {
+func (o *ModifySpendlimitResponseBody) GetMessage() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Message
 }
 
-func (o *ModifySpendlimit200ApplicationJSON) GetResponseTime() *string {
+func (o *ModifySpendlimitResponseBody) GetResponseTime() *string {
 	if o == nil {
 		return nil
 	}
@@ -214,7 +214,7 @@ type ModifySpendlimitResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Successful Card Modify
-	ModifySpendlimit200ApplicationJSONObject *ModifySpendlimit200ApplicationJSON
+	Object *ModifySpendlimitResponseBody
 }
 
 func (o *ModifySpendlimitResponse) GetContentType() string {
@@ -238,9 +238,9 @@ func (o *ModifySpendlimitResponse) GetRawResponse() *http.Response {
 	return o.RawResponse
 }
 
-func (o *ModifySpendlimitResponse) GetModifySpendlimit200ApplicationJSONObject() *ModifySpendlimit200ApplicationJSON {
+func (o *ModifySpendlimitResponse) GetObject() *ModifySpendlimitResponseBody {
 	if o == nil {
 		return nil
 	}
-	return o.ModifySpendlimit200ApplicationJSONObject
+	return o.Object
 }

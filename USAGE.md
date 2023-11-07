@@ -20,12 +20,12 @@ func main() {
 	var phone string = "62-9999999999"
 
 	ctx := context.Background()
-	res, err := s.VirtualCardsAPISpecification.GetCustomerSCardsAPI(ctx, aCorrelationID, aMerchantCode, phone)
+	res, err := s.GetCustomerSCardsAPI(ctx, aCorrelationID, aMerchantCode, phone)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if res.GetCustomerSCardsAPI200ApplicationJSONObject != nil {
+	if res.Object != nil {
 		// handle response
 	}
 }

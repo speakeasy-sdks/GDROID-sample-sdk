@@ -1,4 +1,4 @@
-# IssueCardAPI201ApplicationJSONCardDetail
+# ViewCardAPICardDetail
 
 Card deatils
 

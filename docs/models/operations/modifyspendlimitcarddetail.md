@@ -1,4 +1,4 @@
-# ModifySpendlimitRequestBodyCardDetail
+# ModifySpendlimitCardDetail
 
 
 ## Fields

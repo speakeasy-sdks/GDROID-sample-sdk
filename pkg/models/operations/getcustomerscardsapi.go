@@ -36,8 +36,8 @@ func (o *GetCustomerSCardsAPIRequest) GetPhone() string {
 	return o.Phone
 }
 
-// GetCustomerSCardsAPI200ApplicationJSONCardDetails - Card details
-type GetCustomerSCardsAPI200ApplicationJSONCardDetails struct {
+// CardDetails - Card details
+type CardDetails struct {
 	// Available balance on the card
 	AvailableBalance *float64 `json:"availableBalance,omitempty"`
 	// Unique card ID
@@ -54,59 +54,59 @@ type GetCustomerSCardsAPI200ApplicationJSONCardDetails struct {
 	Status *string `json:"status,omitempty"`
 }
 
-func (o *GetCustomerSCardsAPI200ApplicationJSONCardDetails) GetAvailableBalance() *float64 {
+func (o *CardDetails) GetAvailableBalance() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.AvailableBalance
 }
 
-func (o *GetCustomerSCardsAPI200ApplicationJSONCardDetails) GetCardID() *string {
+func (o *CardDetails) GetCardID() *string {
 	if o == nil {
 		return nil
 	}
 	return o.CardID
 }
 
-func (o *GetCustomerSCardsAPI200ApplicationJSONCardDetails) GetCumulativeLimit() *float64 {
+func (o *CardDetails) GetCumulativeLimit() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.CumulativeLimit
 }
 
-func (o *GetCustomerSCardsAPI200ApplicationJSONCardDetails) GetDeactivatedBalance() *float64 {
+func (o *CardDetails) GetDeactivatedBalance() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.DeactivatedBalance
 }
 
-func (o *GetCustomerSCardsAPI200ApplicationJSONCardDetails) GetExpiry() *string {
+func (o *CardDetails) GetExpiry() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Expiry
 }
 
-func (o *GetCustomerSCardsAPI200ApplicationJSONCardDetails) GetMaskedCard() *string {
+func (o *CardDetails) GetMaskedCard() *string {
 	if o == nil {
 		return nil
 	}
 	return o.MaskedCard
 }
 
-func (o *GetCustomerSCardsAPI200ApplicationJSONCardDetails) GetStatus() *string {
+func (o *CardDetails) GetStatus() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Status
 }
 
-// GetCustomerSCardsAPI200ApplicationJSON - Successful Card Issuance
-type GetCustomerSCardsAPI200ApplicationJSON struct {
+// GetCustomerSCardsAPIResponseBody - Successful Card Issuance
+type GetCustomerSCardsAPIResponseBody struct {
 	// List of cards issued to customer
-	CardDetails []GetCustomerSCardsAPI200ApplicationJSONCardDetails `json:"cardDetails,omitempty"`
+	CardDetails []CardDetails `json:"cardDetails,omitempty"`
 	// Unique code.
 	Code *float64 `json:"code,omitempty"`
 	// Unique customer ID
@@ -117,35 +117,35 @@ type GetCustomerSCardsAPI200ApplicationJSON struct {
 	ResponseTime *string `json:"responseTime,omitempty"`
 }
 
-func (o *GetCustomerSCardsAPI200ApplicationJSON) GetCardDetails() []GetCustomerSCardsAPI200ApplicationJSONCardDetails {
+func (o *GetCustomerSCardsAPIResponseBody) GetCardDetails() []CardDetails {
 	if o == nil {
 		return nil
 	}
 	return o.CardDetails
 }
 
-func (o *GetCustomerSCardsAPI200ApplicationJSON) GetCode() *float64 {
+func (o *GetCustomerSCardsAPIResponseBody) GetCode() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.Code
 }
 
-func (o *GetCustomerSCardsAPI200ApplicationJSON) GetMerchantCustomerID() *string {
+func (o *GetCustomerSCardsAPIResponseBody) GetMerchantCustomerID() *string {
 	if o == nil {
 		return nil
 	}
 	return o.MerchantCustomerID
 }
 
-func (o *GetCustomerSCardsAPI200ApplicationJSON) GetMessage() *string {
+func (o *GetCustomerSCardsAPIResponseBody) GetMessage() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Message
 }
 
-func (o *GetCustomerSCardsAPI200ApplicationJSON) GetResponseTime() *string {
+func (o *GetCustomerSCardsAPIResponseBody) GetResponseTime() *string {
 	if o == nil {
 		return nil
 	}
@@ -160,7 +160,7 @@ type GetCustomerSCardsAPIResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Successful Card Issuance
-	GetCustomerSCardsAPI200ApplicationJSONObject *GetCustomerSCardsAPI200ApplicationJSON
+	Object *GetCustomerSCardsAPIResponseBody
 }
 
 func (o *GetCustomerSCardsAPIResponse) GetContentType() string {
@@ -184,9 +184,9 @@ func (o *GetCustomerSCardsAPIResponse) GetRawResponse() *http.Response {
 	return o.RawResponse
 }
 
-func (o *GetCustomerSCardsAPIResponse) GetGetCustomerSCardsAPI200ApplicationJSONObject() *GetCustomerSCardsAPI200ApplicationJSON {
+func (o *GetCustomerSCardsAPIResponse) GetObject() *GetCustomerSCardsAPIResponseBody {
 	if o == nil {
 		return nil
 	}
-	return o.GetCustomerSCardsAPI200ApplicationJSONObject
+	return o.Object
 }

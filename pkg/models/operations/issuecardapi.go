@@ -6,22 +6,22 @@ import (
 	"net/http"
 )
 
-// IssueCardAPIRequestBodyCardDetail - Card deatils object
-type IssueCardAPIRequestBodyCardDetail struct {
+// CardDetail - Card deatils object
+type CardDetail struct {
 	// Specifies the spending limit for the issuing card.
 	SpendLimit *float64 `json:"spendLimit,omitempty"`
 	// Specifies the validity in number of months for the issuing card. 1 to 24
 	Validity *float64 `json:"validity,omitempty"`
 }
 
-func (o *IssueCardAPIRequestBodyCardDetail) GetSpendLimit() *float64 {
+func (o *CardDetail) GetSpendLimit() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.SpendLimit
 }
 
-func (o *IssueCardAPIRequestBodyCardDetail) GetValidity() *float64 {
+func (o *CardDetail) GetValidity() *float64 {
 	if o == nil {
 		return nil
 	}
@@ -30,7 +30,7 @@ func (o *IssueCardAPIRequestBodyCardDetail) GetValidity() *float64 {
 
 type IssueCardAPIRequestBody struct {
 	// Card deatils object
-	CardDetail IssueCardAPIRequestBodyCardDetail `json:"cardDetail"`
+	CardDetail CardDetail `json:"cardDetail"`
 	// Customer email.
 	Email string `json:"email"`
 	// Customer name. Only contains alphabets. limited to length from 2-20
@@ -41,9 +41,9 @@ type IssueCardAPIRequestBody struct {
 	Phone string `json:"phone"`
 }
 
-func (o *IssueCardAPIRequestBody) GetCardDetail() IssueCardAPIRequestBodyCardDetail {
+func (o *IssueCardAPIRequestBody) GetCardDetail() CardDetail {
 	if o == nil {
-		return IssueCardAPIRequestBodyCardDetail{}
+		return CardDetail{}
 	}
 	return o.CardDetail
 }
@@ -105,8 +105,8 @@ func (o *IssueCardAPIRequest) GetRequestBody() *IssueCardAPIRequestBody {
 	return o.RequestBody
 }
 
-// IssueCardAPI201ApplicationJSONCardDetail - Card deatils
-type IssueCardAPI201ApplicationJSONCardDetail struct {
+// IssueCardAPICardDetail - Card deatils
+type IssueCardAPICardDetail struct {
 	// Available balance on the card
 	AvailableBalance *float64 `json:"availableBalance,omitempty"`
 	// Unique card ID
@@ -123,59 +123,59 @@ type IssueCardAPI201ApplicationJSONCardDetail struct {
 	Status *string `json:"status,omitempty"`
 }
 
-func (o *IssueCardAPI201ApplicationJSONCardDetail) GetAvailableBalance() *float64 {
+func (o *IssueCardAPICardDetail) GetAvailableBalance() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.AvailableBalance
 }
 
-func (o *IssueCardAPI201ApplicationJSONCardDetail) GetCardID() *string {
+func (o *IssueCardAPICardDetail) GetCardID() *string {
 	if o == nil {
 		return nil
 	}
 	return o.CardID
 }
 
-func (o *IssueCardAPI201ApplicationJSONCardDetail) GetCumulativeLimit() *float64 {
+func (o *IssueCardAPICardDetail) GetCumulativeLimit() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.CumulativeLimit
 }
 
-func (o *IssueCardAPI201ApplicationJSONCardDetail) GetDeactivatedBalance() *float64 {
+func (o *IssueCardAPICardDetail) GetDeactivatedBalance() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.DeactivatedBalance
 }
 
-func (o *IssueCardAPI201ApplicationJSONCardDetail) GetExpiry() *string {
+func (o *IssueCardAPICardDetail) GetExpiry() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Expiry
 }
 
-func (o *IssueCardAPI201ApplicationJSONCardDetail) GetMaskedCard() *string {
+func (o *IssueCardAPICardDetail) GetMaskedCard() *string {
 	if o == nil {
 		return nil
 	}
 	return o.MaskedCard
 }
 
-func (o *IssueCardAPI201ApplicationJSONCardDetail) GetStatus() *string {
+func (o *IssueCardAPICardDetail) GetStatus() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Status
 }
 
-// IssueCardAPI201ApplicationJSON - Successful Card Issuance
-type IssueCardAPI201ApplicationJSON struct {
+// IssueCardAPIResponseBody - Successful Card Issuance
+type IssueCardAPIResponseBody struct {
 	// Card deatils
-	CardDetail *IssueCardAPI201ApplicationJSONCardDetail `json:"cardDetail,omitempty"`
+	CardDetail *IssueCardAPICardDetail `json:"cardDetail,omitempty"`
 	// Unique code.
 	Code *float64 `json:"code,omitempty"`
 	// Unique customer ID
@@ -186,35 +186,35 @@ type IssueCardAPI201ApplicationJSON struct {
 	ResponseTime *string `json:"responseTime,omitempty"`
 }
 
-func (o *IssueCardAPI201ApplicationJSON) GetCardDetail() *IssueCardAPI201ApplicationJSONCardDetail {
+func (o *IssueCardAPIResponseBody) GetCardDetail() *IssueCardAPICardDetail {
 	if o == nil {
 		return nil
 	}
 	return o.CardDetail
 }
 
-func (o *IssueCardAPI201ApplicationJSON) GetCode() *float64 {
+func (o *IssueCardAPIResponseBody) GetCode() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.Code
 }
 
-func (o *IssueCardAPI201ApplicationJSON) GetMerchantCustomerID() *string {
+func (o *IssueCardAPIResponseBody) GetMerchantCustomerID() *string {
 	if o == nil {
 		return nil
 	}
 	return o.MerchantCustomerID
 }
 
-func (o *IssueCardAPI201ApplicationJSON) GetMessage() *string {
+func (o *IssueCardAPIResponseBody) GetMessage() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Message
 }
 
-func (o *IssueCardAPI201ApplicationJSON) GetResponseTime() *string {
+func (o *IssueCardAPIResponseBody) GetResponseTime() *string {
 	if o == nil {
 		return nil
 	}
@@ -229,7 +229,7 @@ type IssueCardAPIResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Successful Card Issuance
-	IssueCardAPI201ApplicationJSONObject *IssueCardAPI201ApplicationJSON
+	Object *IssueCardAPIResponseBody
 }
 
 func (o *IssueCardAPIResponse) GetContentType() string {
@@ -253,9 +253,9 @@ func (o *IssueCardAPIResponse) GetRawResponse() *http.Response {
 	return o.RawResponse
 }
 
-func (o *IssueCardAPIResponse) GetIssueCardAPI201ApplicationJSONObject() *IssueCardAPI201ApplicationJSON {
+func (o *IssueCardAPIResponse) GetObject() *IssueCardAPIResponseBody {
 	if o == nil {
 		return nil
 	}
-	return o.IssueCardAPI201ApplicationJSONObject
+	return o.Object
 }

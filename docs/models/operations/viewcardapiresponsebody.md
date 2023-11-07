@@ -1,0 +1,15 @@
+# ViewCardAPIResponseBody
+
+Successful Card Issuance
+
+
+## Fields
+
+| Field                                                                                 | Type                                                                                  | Required                                                                              | Description                                                                           |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `CardDetail`                                                                          | [*operations.ViewCardAPICardDetail](../../models/operations/viewcardapicarddetail.md) | :heavy_minus_sign:                                                                    | Card deatils                                                                          |
+| `Code`                                                                                | **float64*                                                                            | :heavy_minus_sign:                                                                    | Unique code.                                                                          |
+| `MerchantCustomerID`                                                                  | **string*                                                                             | :heavy_minus_sign:                                                                    | Unique customer ID                                                                    |
+| `Message`                                                                             | **string*                                                                             | :heavy_minus_sign:                                                                    | Description of the response code.                                                     |
+| `ResponseTime`                                                                        | **string*                                                                             | :heavy_minus_sign:                                                                    | Exact TimeStamp of the response in Unix Nanoseconds format.                           |
+| `Webview`                                                                             | [*operations.Webview](../../models/operations/webview.md)                             | :heavy_minus_sign:                                                                    | Card deatils                                                                          |

@@ -709,12 +709,12 @@ func main() {
     var phone string = "62-9999999999"
 
     ctx := context.Background()
-    res, err := s.VirtualCardsAPISpecification.GetCustomerSCardsAPI(ctx, aCorrelationID, aMerchantCode, phone)
+    res, err := s.GetCustomerSCardsAPI(ctx, aCorrelationID, aMerchantCode, phone)
     if err != nil {
         log.Fatal(err)
     }
 
-    if res.GetCustomerSCardsAPI200ApplicationJSONObject != nil {
+    if res.Object != nil {
         // handle response
     }
 }
@@ -760,7 +760,7 @@ func main() {
     var aMerchantCode string = "AYOPOP"
 
     requestBody := &operations.IssueCardAPIRequestBody{
-        CardDetail: operations.IssueCardAPIRequestBodyCardDetail{
+        CardDetail: operations.CardDetail{
             SpendLimit: gdroidsamplesdk.Float64(1000),
             Validity: gdroidsamplesdk.Float64(1),
         },
@@ -771,12 +771,12 @@ func main() {
     }
 
     ctx := context.Background()
-    res, err := s.VirtualCardsAPISpecification.IssueCardAPI(ctx, aCorrelationID, aMerchantCode, requestBody)
+    res, err := s.IssueCardAPI(ctx, aCorrelationID, aMerchantCode, requestBody)
     if err != nil {
         log.Fatal(err)
     }
 
-    if res.IssueCardAPI201ApplicationJSONObject != nil {
+    if res.Object != nil {
         // handle response
     }
 }
@@ -824,7 +824,7 @@ func main() {
     var cardID string = "CIXXXXXXXX"
 
     requestBody := &operations.ModifySpendlimitRequestBody{
-        CardDetail: &operations.ModifySpendlimitRequestBodyCardDetail{
+        CardDetail: &operations.ModifySpendlimitCardDetail{
             SpendLimit: gdroidsamplesdk.Float64(5000),
             Status: gdroidsamplesdk.String("ACTIVE/INACTIVE/DEACTIVATE"),
             Validity: gdroidsamplesdk.Float64(24),
@@ -833,12 +833,12 @@ func main() {
     }
 
     ctx := context.Background()
-    res, err := s.VirtualCardsAPISpecification.ModifySpendlimit(ctx, aCorrelationID, aMerchantCode, cardID, requestBody)
+    res, err := s.ModifySpendlimit(ctx, aCorrelationID, aMerchantCode, cardID, requestBody)
     if err != nil {
         log.Fatal(err)
     }
 
-    if res.ModifySpendlimit200ApplicationJSONObject != nil {
+    if res.Object != nil {
         // handle response
     }
 }
@@ -888,12 +888,12 @@ func main() {
     var merchantCustomerID string = "CUXXXXXXXX"
 
     ctx := context.Background()
-    res, err := s.VirtualCardsAPISpecification.ViewCardAPI(ctx, aCorrelationID, aMerchantCode, cardID, merchantCustomerID)
+    res, err := s.ViewCardAPI(ctx, aCorrelationID, aMerchantCode, cardID, merchantCustomerID)
     if err != nil {
         log.Fatal(err)
     }
 
-    if res.ViewCardAPI200ApplicationJSONObject != nil {
+    if res.Object != nil {
         // handle response
     }
 }

@@ -1,4 +1,4 @@
-# IssueCardAPIRequestBodyCardDetail
+# CardDetail
 
 Card deatils object
 

@@ -45,8 +45,8 @@ func (o *ViewCardAPIRequest) GetMerchantCustomerID() string {
 	return o.MerchantCustomerID
 }
 
-// ViewCardAPI200ApplicationJSONCardDetail - Card deatils
-type ViewCardAPI200ApplicationJSONCardDetail struct {
+// ViewCardAPICardDetail - Card deatils
+type ViewCardAPICardDetail struct {
 	// Available balance on the card
 	AvailableBalance *float64 `json:"availableBalance,omitempty"`
 	// Unique card ID
@@ -63,72 +63,72 @@ type ViewCardAPI200ApplicationJSONCardDetail struct {
 	Status *string `json:"status,omitempty"`
 }
 
-func (o *ViewCardAPI200ApplicationJSONCardDetail) GetAvailableBalance() *float64 {
+func (o *ViewCardAPICardDetail) GetAvailableBalance() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.AvailableBalance
 }
 
-func (o *ViewCardAPI200ApplicationJSONCardDetail) GetCardID() *string {
+func (o *ViewCardAPICardDetail) GetCardID() *string {
 	if o == nil {
 		return nil
 	}
 	return o.CardID
 }
 
-func (o *ViewCardAPI200ApplicationJSONCardDetail) GetCumulativeLimit() *float64 {
+func (o *ViewCardAPICardDetail) GetCumulativeLimit() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.CumulativeLimit
 }
 
-func (o *ViewCardAPI200ApplicationJSONCardDetail) GetDeactivatedBalance() *float64 {
+func (o *ViewCardAPICardDetail) GetDeactivatedBalance() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.DeactivatedBalance
 }
 
-func (o *ViewCardAPI200ApplicationJSONCardDetail) GetExpiry() *string {
+func (o *ViewCardAPICardDetail) GetExpiry() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Expiry
 }
 
-func (o *ViewCardAPI200ApplicationJSONCardDetail) GetMaskedCard() *string {
+func (o *ViewCardAPICardDetail) GetMaskedCard() *string {
 	if o == nil {
 		return nil
 	}
 	return o.MaskedCard
 }
 
-func (o *ViewCardAPI200ApplicationJSONCardDetail) GetStatus() *string {
+func (o *ViewCardAPICardDetail) GetStatus() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Status
 }
 
-// ViewCardAPI200ApplicationJSONWebview - Card deatils
-type ViewCardAPI200ApplicationJSONWebview struct {
+// Webview - Card deatils
+type Webview struct {
 	// Unique card webview URI
 	URI *string `json:"URI,omitempty"`
 }
 
-func (o *ViewCardAPI200ApplicationJSONWebview) GetURI() *string {
+func (o *Webview) GetURI() *string {
 	if o == nil {
 		return nil
 	}
 	return o.URI
 }
 
-// ViewCardAPI200ApplicationJSON - Successful Card Issuance
-type ViewCardAPI200ApplicationJSON struct {
+// ViewCardAPIResponseBody - Successful Card Issuance
+type ViewCardAPIResponseBody struct {
 	// Card deatils
-	CardDetail *ViewCardAPI200ApplicationJSONCardDetail `json:"cardDetail,omitempty"`
+	CardDetail *ViewCardAPICardDetail `json:"cardDetail,omitempty"`
 	// Unique code.
 	Code *float64 `json:"code,omitempty"`
 	// Unique customer ID
@@ -138,45 +138,45 @@ type ViewCardAPI200ApplicationJSON struct {
 	// Exact TimeStamp of the response in Unix Nanoseconds format.
 	ResponseTime *string `json:"responseTime,omitempty"`
 	// Card deatils
-	Webview *ViewCardAPI200ApplicationJSONWebview `json:"webview,omitempty"`
+	Webview *Webview `json:"webview,omitempty"`
 }
 
-func (o *ViewCardAPI200ApplicationJSON) GetCardDetail() *ViewCardAPI200ApplicationJSONCardDetail {
+func (o *ViewCardAPIResponseBody) GetCardDetail() *ViewCardAPICardDetail {
 	if o == nil {
 		return nil
 	}
 	return o.CardDetail
 }
 
-func (o *ViewCardAPI200ApplicationJSON) GetCode() *float64 {
+func (o *ViewCardAPIResponseBody) GetCode() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.Code
 }
 
-func (o *ViewCardAPI200ApplicationJSON) GetMerchantCustomerID() *string {
+func (o *ViewCardAPIResponseBody) GetMerchantCustomerID() *string {
 	if o == nil {
 		return nil
 	}
 	return o.MerchantCustomerID
 }
 
-func (o *ViewCardAPI200ApplicationJSON) GetMessage() *string {
+func (o *ViewCardAPIResponseBody) GetMessage() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Message
 }
 
-func (o *ViewCardAPI200ApplicationJSON) GetResponseTime() *string {
+func (o *ViewCardAPIResponseBody) GetResponseTime() *string {
 	if o == nil {
 		return nil
 	}
 	return o.ResponseTime
 }
 
-func (o *ViewCardAPI200ApplicationJSON) GetWebview() *ViewCardAPI200ApplicationJSONWebview {
+func (o *ViewCardAPIResponseBody) GetWebview() *Webview {
 	if o == nil {
 		return nil
 	}
@@ -191,7 +191,7 @@ type ViewCardAPIResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Successful Card Issuance
-	ViewCardAPI200ApplicationJSONObject *ViewCardAPI200ApplicationJSON
+	Object *ViewCardAPIResponseBody
 }
 
 func (o *ViewCardAPIResponse) GetContentType() string {
@@ -215,9 +215,9 @@ func (o *ViewCardAPIResponse) GetRawResponse() *http.Response {
 	return o.RawResponse
 }
 
-func (o *ViewCardAPIResponse) GetViewCardAPI200ApplicationJSONObject() *ViewCardAPI200ApplicationJSON {
+func (o *ViewCardAPIResponse) GetObject() *ViewCardAPIResponseBody {
 	if o == nil {
 		return nil
 	}
-	return o.ViewCardAPI200ApplicationJSONObject
+	return o.Object
 }

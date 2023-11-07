@@ -1,6 +1,6 @@
-# GetCustomerSCardsAPI200ApplicationJSONCardDetails
+# ModifySpendlimitResponseCardDetail
 
-Card details
+Card deatils
 
 
 ## Fields
