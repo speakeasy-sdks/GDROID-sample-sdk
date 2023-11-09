@@ -74,7 +74,46 @@ func main() {
 <!-- Start Error Handling -->
 # Error Handling
 
-Handling errors in your SDK should largely match your expectations.  All operations return a response object or an error, they will never return both.  When specified by the OpenAPI spec document, the SDK will return the appropriate subclass.
+Handling errors in this SDK should largely match your expectations.  All operations return a response object or an error, they will never return both.  When specified by the OpenAPI spec document, the SDK will return the appropriate subclass.
+
+| Error Object       | Status Code        | Content Type       |
+| ------------------ | ------------------ | ------------------ |
+| sdkerrors.SDKError | 400-600            | */*                |
+
+
+## Example
+
+```go
+package main
+
+import (
+	"context"
+	gdroidsamplesdk "github.com/speakeasy-sdks/GDROID-sample-sdk"
+	"log"
+)
+
+func main() {
+	s := gdroidsamplesdk.New()
+
+	var aCorrelationID string = "a16a1bd9-6411-48a8-aeed-94c383c481ea"
+
+	var aMerchantCode string = "AYOPOP"
+
+	var phone string = "62-9999999999"
+
+	ctx := context.Background()
+	res, err := s.GetCustomerSCardsAPI(ctx, aCorrelationID, aMerchantCode, phone)
+	if err != nil {
+
+		var e *sdkerrors.SDKError
+		if errors.As(err, &e) {
+			// handle error
+			log.Fatal(e.Error())
+		}
+	}
+}
+
+```
 <!-- End Error Handling -->
 
 <!-- Start Server Selection -->

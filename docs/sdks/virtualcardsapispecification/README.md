@@ -732,8 +732,10 @@ func main() {
 
 ### Response
 
-**[*operations.GetCustomerSCardsAPIResponse](../../models/operations/getcustomerscardsapiresponse.md), error**
-
+**[*operations.GetCustomerSCardsAPIResponse](../../pkg/models/operations/getcustomerscardsapiresponse.md), error**
+| Error Object       | Status Code        | Content Type       |
+| ------------------ | ------------------ | ------------------ |
+| sdkerrors.SDKError | 400-600            | */*                |
 
 ## IssueCardAPI
 
@@ -789,13 +791,15 @@ func main() {
 | `ctx`                                                                                                                                                                       | [context.Context](https://pkg.go.dev/context#Context)                                                                                                                       | :heavy_check_mark:                                                                                                                                                          | The context to use for the request.                                                                                                                                         |                                                                                                                                                                             |
 | `aCorrelationID`                                                                                                                                                            | *string*                                                                                                                                                                    | :heavy_check_mark:                                                                                                                                                          | Unique, hyphen-separated alphanumeric string. We recommend the UUID algorithm, an industry standard that guarantees a high degree of uniqueness length 14 to 36 characters. | a16a1bd9-6411-48a8-aeed-94c383c481ea                                                                                                                                        |
 | `aMerchantCode`                                                                                                                                                             | *string*                                                                                                                                                                    | :heavy_check_mark:                                                                                                                                                          | Unique Merchant Code provided by Ayoconnect.                                                                                                                                | AYOPOP                                                                                                                                                                      |
-| `requestBody`                                                                                                                                                               | [*operations.IssueCardAPIRequestBody](../../models/operations/issuecardapirequestbody.md)                                                                                   | :heavy_minus_sign:                                                                                                                                                          | N/A                                                                                                                                                                         |                                                                                                                                                                             |
+| `requestBody`                                                                                                                                                               | [*operations.IssueCardAPIRequestBody](../../../pkg/models/operations/issuecardapirequestbody.md)                                                                            | :heavy_minus_sign:                                                                                                                                                          | N/A                                                                                                                                                                         |                                                                                                                                                                             |
 
 
 ### Response
 
-**[*operations.IssueCardAPIResponse](../../models/operations/issuecardapiresponse.md), error**
-
+**[*operations.IssueCardAPIResponse](../../pkg/models/operations/issuecardapiresponse.md), error**
+| Error Object       | Status Code        | Content Type       |
+| ------------------ | ------------------ | ------------------ |
+| sdkerrors.SDKError | 400-600            | */*                |
 
 ## ModifySpendlimit
 
@@ -852,13 +856,15 @@ func main() {
 | `aCorrelationID`                                                                                                                                                            | *string*                                                                                                                                                                    | :heavy_check_mark:                                                                                                                                                          | Unique, hyphen-separated alphanumeric string. We recommend the UUID algorithm, an industry standard that guarantees a high degree of uniqueness length 14 to 36 characters. | a16a1bd9-6411-48a8-aeed-94c383c481ea                                                                                                                                        |
 | `aMerchantCode`                                                                                                                                                             | *string*                                                                                                                                                                    | :heavy_check_mark:                                                                                                                                                          | Unique Merchant Code provided by Ayoconnect.                                                                                                                                | AYOPOP                                                                                                                                                                      |
 | `cardID`                                                                                                                                                                    | *string*                                                                                                                                                                    | :heavy_check_mark:                                                                                                                                                          | Unique Card ID returned in Issue card API                                                                                                                                   | CIXXXXXXXX                                                                                                                                                                  |
-| `requestBody`                                                                                                                                                               | [*operations.ModifySpendlimitRequestBody](../../models/operations/modifyspendlimitrequestbody.md)                                                                           | :heavy_minus_sign:                                                                                                                                                          | N/A                                                                                                                                                                         |                                                                                                                                                                             |
+| `requestBody`                                                                                                                                                               | [*operations.ModifySpendlimitRequestBody](../../../pkg/models/operations/modifyspendlimitrequestbody.md)                                                                    | :heavy_minus_sign:                                                                                                                                                          | N/A                                                                                                                                                                         |                                                                                                                                                                             |
 
 
 ### Response
 
-**[*operations.ModifySpendlimitResponse](../../models/operations/modifyspendlimitresponse.md), error**
-
+**[*operations.ModifySpendlimitResponse](../../pkg/models/operations/modifyspendlimitresponse.md), error**
+| Error Object       | Status Code        | Content Type       |
+| ------------------ | ------------------ | ------------------ |
+| sdkerrors.SDKError | 400-600            | */*                |
 
 ## ViewCardAPI
 
@@ -912,5 +918,7 @@ func main() {
 
 ### Response
 
-**[*operations.ViewCardAPIResponse](../../models/operations/viewcardapiresponse.md), error**
-
+**[*operations.ViewCardAPIResponse](../../pkg/models/operations/viewcardapiresponse.md), error**
+| Error Object       | Status Code        | Content Type       |
+| ------------------ | ------------------ | ------------------ |
+| sdkerrors.SDKError | 400-600            | */*                |
