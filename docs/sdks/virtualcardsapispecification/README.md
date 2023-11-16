@@ -693,9 +693,9 @@ This API will fetch all cards that belong to the specified customer
 package main
 
 import(
+	gdroidsamplesdk "github.com/speakeasy-sdks/GDROID-sample-sdk"
 	"context"
 	"log"
-	gdroidsamplesdk "github.com/speakeasy-sdks/GDROID-sample-sdk"
 )
 
 func main() {
@@ -747,10 +747,10 @@ This API is used to issue new cards to your customers
 package main
 
 import(
-	"context"
-	"log"
 	gdroidsamplesdk "github.com/speakeasy-sdks/GDROID-sample-sdk"
 	"github.com/speakeasy-sdks/GDROID-sample-sdk/pkg/models/operations"
+	"context"
+	"log"
 )
 
 func main() {
@@ -811,10 +811,10 @@ This API is used to make modifications on an exisitng virtual card
 package main
 
 import(
-	"context"
-	"log"
 	gdroidsamplesdk "github.com/speakeasy-sdks/GDROID-sample-sdk"
 	"github.com/speakeasy-sdks/GDROID-sample-sdk/pkg/models/operations"
+	"context"
+	"log"
 )
 
 func main() {
@@ -876,9 +876,9 @@ This API is used to get card information and card webview URL
 package main
 
 import(
+	gdroidsamplesdk "github.com/speakeasy-sdks/GDROID-sample-sdk"
 	"context"
 	"log"
-	gdroidsamplesdk "github.com/speakeasy-sdks/GDROID-sample-sdk"
 )
 
 func main() {
