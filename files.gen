@@ -22,7 +22,6 @@ pkg/utils/utils.go
 /pkg/models/operations/issuecardapi.go
 /pkg/models/operations/modifyspendlimit.go
 /pkg/models/operations/viewcardapi.go
-USAGE.md
 docs/pkg/models/operations/getcustomerscardsapirequest.md
 docs/pkg/models/operations/carddetails.md
 docs/pkg/models/operations/getcustomerscardsapiresponsebody.md
@@ -45,4 +44,5 @@ docs/pkg/models/operations/webview.md
 docs/pkg/models/operations/viewcardapiresponsebody.md
 docs/pkg/models/operations/viewcardapiresponse.md
 docs/sdks/virtualcardsapispecification/README.md
+USAGE.md
 .gitattributes
