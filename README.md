@@ -232,6 +232,8 @@ This can be a convenient way to configure timeouts, cookies, proxies, custom hea
 
 <!-- Start Special Types [types] -->
 ## Special Types
+
+
 <!-- End Special Types [types] -->
 
 <!-- Placeholder for Future Speakeasy SDK Sections -->
