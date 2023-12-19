@@ -735,7 +735,7 @@ func main() {
 **[*operations.GetCustomerSCardsAPIResponse](../../pkg/models/operations/getcustomerscardsapiresponse.md), error**
 | Error Object       | Status Code        | Content Type       |
 | ------------------ | ------------------ | ------------------ |
-| sdkerrors.SDKError | 400-600            | */*                |
+| sdkerrors.SDKError | 4xx-5xx            | */*                |
 
 ## IssueCardAPI
 
@@ -799,7 +799,7 @@ func main() {
 **[*operations.IssueCardAPIResponse](../../pkg/models/operations/issuecardapiresponse.md), error**
 | Error Object       | Status Code        | Content Type       |
 | ------------------ | ------------------ | ------------------ |
-| sdkerrors.SDKError | 400-600            | */*                |
+| sdkerrors.SDKError | 4xx-5xx            | */*                |
 
 ## ModifySpendlimit
 
@@ -864,7 +864,7 @@ func main() {
 **[*operations.ModifySpendlimitResponse](../../pkg/models/operations/modifyspendlimitresponse.md), error**
 | Error Object       | Status Code        | Content Type       |
 | ------------------ | ------------------ | ------------------ |
-| sdkerrors.SDKError | 400-600            | */*                |
+| sdkerrors.SDKError | 4xx-5xx            | */*                |
 
 ## ViewCardAPI
 
@@ -921,4 +921,4 @@ func main() {
 **[*operations.ViewCardAPIResponse](../../pkg/models/operations/viewcardapiresponse.md), error**
 | Error Object       | Status Code        | Content Type       |
 | ------------------ | ------------------ | ------------------ |
-| sdkerrors.SDKError | 400-600            | */*                |
+| sdkerrors.SDKError | 4xx-5xx            | */*                |

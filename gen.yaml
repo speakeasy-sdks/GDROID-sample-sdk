@@ -2,21 +2,23 @@ configVersion: 1.0.0
 management:
   docChecksum: 75701c8d7873ea9340830005721e547f
   docVersion: 1.6.7
-  speakeasyVersion: 1.126.0
-  generationVersion: 2.213.3
+  speakeasyVersion: 1.127.0
+  generationVersion: 2.220.0
 generation:
   comments: {}
   sdkClassName: Virtual-cards-API-Specification
   repoURL: https://github.com/speakeasy-sdks/GDROID-sample-sdk.git
   usageSnippets:
     optionalPropertyRendering: withExample
+  fixes:
+    nameResolutionDec2023: false
 features:
   go:
-    core: 3.2.0
+    core: 3.2.2
     flattening: 2.81.1
     globalServerURLs: 2.82.1
 go:
-  version: 0.3.0
+  version: 0.3.1
   clientServerStatusCodesAsErrors: true
   flattenGlobalSecurity: true
   imports:
