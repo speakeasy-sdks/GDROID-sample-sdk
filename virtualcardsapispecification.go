@@ -798,8 +798,8 @@ func New(opts ...SDKOption) *VirtualCardsAPISpecification {
 			Language:          "go",
 			OpenAPIDocVersion: "1.6.7",
 			SDKVersion:        "0.3.1",
-			GenVersion:        "2.220.0",
-			UserAgent:         "speakeasy-sdk/go 0.3.1 2.220.0 1.6.7 github.com/speakeasy-sdks/GDROID-sample-sdk",
+			GenVersion:        "2.225.2",
+			UserAgent:         "speakeasy-sdk/go 0.3.1 2.225.2 1.6.7 github.com/speakeasy-sdks/GDROID-sample-sdk",
 		},
 	}
 	for _, opt := range opts {

@@ -1,0 +1,67 @@
+lockVersion: 2.0.0
+id: b1eaf99a-86a9-417e-ad1f-9c86bf672cda
+management:
+  docChecksum: 75701c8d7873ea9340830005721e547f
+  docVersion: 1.6.7
+  speakeasyVersion: internal
+  generationVersion: 2.225.2
+  releaseVersion: 0.3.1
+  configChecksum: 116dca864c1b0c200f52d7d1b0d17d7b
+  repoURL: https://github.com/speakeasy-sdks/GDROID-sample-sdk.git
+  repoSubDirectory: .
+  installationURL: https://github.com/speakeasy-sdks/GDROID-sample-sdk
+  published: true
+features:
+  go:
+    core: 3.3.0
+    flattening: 2.81.1
+    globalServerURLs: 2.82.1
+generatedFiles:
+  - virtualcardsapispecification.go
+  - go.mod
+  - go.sum
+  - tests/helpers.go
+  - pkg/models/sdkerrors/sdkerror.go
+  - pkg/types/bigint.go
+  - pkg/types/date.go
+  - pkg/types/datetime.go
+  - pkg/types/decimal.go
+  - pkg/types/pointers.go
+  - pkg/utils/contenttype.go
+  - pkg/utils/form.go
+  - pkg/utils/headers.go
+  - pkg/utils/json.go
+  - pkg/utils/pathparams.go
+  - pkg/utils/queryparams.go
+  - pkg/utils/requestbody.go
+  - pkg/utils/retries.go
+  - pkg/utils/security.go
+  - pkg/utils/utils.go
+  - /pkg/models/operations/getcustomerscardsapi.go
+  - /pkg/models/operations/issuecardapi.go
+  - /pkg/models/operations/modifyspendlimit.go
+  - /pkg/models/operations/viewcardapi.go
+  - docs/pkg/models/operations/getcustomerscardsapirequest.md
+  - docs/pkg/models/operations/carddetails.md
+  - docs/pkg/models/operations/getcustomerscardsapiresponsebody.md
+  - docs/pkg/models/operations/getcustomerscardsapiresponse.md
+  - docs/pkg/models/operations/carddetail.md
+  - docs/pkg/models/operations/issuecardapirequestbody.md
+  - docs/pkg/models/operations/issuecardapirequest.md
+  - docs/pkg/models/operations/issuecardapicarddetail.md
+  - docs/pkg/models/operations/issuecardapiresponsebody.md
+  - docs/pkg/models/operations/issuecardapiresponse.md
+  - docs/pkg/models/operations/modifyspendlimitcarddetail.md
+  - docs/pkg/models/operations/modifyspendlimitrequestbody.md
+  - docs/pkg/models/operations/modifyspendlimitrequest.md
+  - docs/pkg/models/operations/modifyspendlimitresponsecarddetail.md
+  - docs/pkg/models/operations/modifyspendlimitresponsebody.md
+  - docs/pkg/models/operations/modifyspendlimitresponse.md
+  - docs/pkg/models/operations/viewcardapirequest.md
+  - docs/pkg/models/operations/viewcardapicarddetail.md
+  - docs/pkg/models/operations/webview.md
+  - docs/pkg/models/operations/viewcardapiresponsebody.md
+  - docs/pkg/models/operations/viewcardapiresponse.md
+  - docs/sdks/virtualcardsapispecification/README.md
+  - USAGE.md
+  - .gitattributes
