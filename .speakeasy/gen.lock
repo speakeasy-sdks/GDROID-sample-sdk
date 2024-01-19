@@ -4,7 +4,7 @@ management:
   docChecksum: 75701c8d7873ea9340830005721e547f
   docVersion: 1.6.7
   speakeasyVersion: internal
-  generationVersion: 2.234.3
+  generationVersion: 2.237.2
   releaseVersion: 0.3.2
   configChecksum: 300c72beb4f7f4ee2ae4bb565f463b88
   repoURL: https://github.com/speakeasy-sdks/GDROID-sample-sdk.git
@@ -20,7 +20,6 @@ generatedFiles:
   - virtualcardsapispecification.go
   - go.mod
   - go.sum
-  - tests/helpers.go
   - pkg/models/sdkerrors/sdkerror.go
   - pkg/types/bigint.go
   - pkg/types/date.go
