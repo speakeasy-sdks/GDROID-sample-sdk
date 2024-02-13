@@ -4,9 +4,9 @@ management:
   docChecksum: 75701c8d7873ea9340830005721e547f
   docVersion: 1.6.7
   speakeasyVersion: internal
-  generationVersion: 2.250.2
-  releaseVersion: 0.4.0
-  configChecksum: 205d84c98e7ce699ae43a0f3224eb015
+  generationVersion: 2.253.0
+  releaseVersion: 0.4.1
+  configChecksum: 5ab608f565be3aedcc69e7f2fe611344
   repoURL: https://github.com/speakeasy-sdks/GDROID-sample-sdk.git
   repoSubDirectory: .
   installationURL: https://github.com/speakeasy-sdks/GDROID-sample-sdk

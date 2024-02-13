@@ -828,11 +828,6 @@ func main() {
     var cardID string = "CIXXXXXXXX"
 
     requestBody := &operations.ModifySpendlimitRequestBody{
-        CardDetail: &operations.ModifySpendlimitCardDetail{
-            SpendLimit: gdroidsamplesdk.Float64(5000),
-            Status: gdroidsamplesdk.String("ACTIVE/INACTIVE/DEACTIVATE"),
-            Validity: gdroidsamplesdk.Float64(24),
-        },
         MerchantCustomerID: gdroidsamplesdk.String("CIXXXXXXXXXX"),
     }
 
