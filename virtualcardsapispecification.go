@@ -6,12 +6,13 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/speakeasy-sdks/GDROID-sample-sdk/internal/hooks"
 	"github.com/speakeasy-sdks/GDROID-sample-sdk/pkg/models/operations"
 	"github.com/speakeasy-sdks/GDROID-sample-sdk/pkg/models/sdkerrors"
 	"github.com/speakeasy-sdks/GDROID-sample-sdk/pkg/utils"
 	"io"
 	"net/http"
-	"strings"
+	"net/url"
 	"time"
 )
 
@@ -56,6 +57,7 @@ type sdkConfiguration struct {
 	GenVersion        string
 	UserAgent         string
 	RetryConfig       *utils.RetryConfig
+	Hooks             *hooks.Hooks
 }
 
 func (c *sdkConfiguration) GetServerDetails() (string, map[string]string) {
@@ -797,14 +799,17 @@ func New(opts ...SDKOption) *VirtualCardsAPISpecification {
 		sdkConfiguration: sdkConfiguration{
 			Language:          "go",
 			OpenAPIDocVersion: "1.6.7",
-			SDKVersion:        "0.4.1",
-			GenVersion:        "2.253.0",
-			UserAgent:         "speakeasy-sdk/go 0.4.1 2.253.0 1.6.7 github.com/speakeasy-sdks/GDROID-sample-sdk",
+			SDKVersion:        "0.5.0",
+			GenVersion:        "2.258.2",
+			UserAgent:         "speakeasy-sdk/go 0.5.0 2.258.2 1.6.7 github.com/speakeasy-sdks/GDROID-sample-sdk",
+			Hooks:             hooks.New(),
 		},
 	}
 	for _, opt := range opts {
 		opt(sdk)
 	}
+
+	sdk.sdkConfiguration.DefaultClient = sdk.sdkConfiguration.Hooks.ClientInit(sdk.sdkConfiguration.DefaultClient)
 
 	// Use WithClient to override the default client if you would like to customize the timeout
 	if sdk.sdkConfiguration.DefaultClient == nil {
@@ -820,6 +825,8 @@ func New(opts ...SDKOption) *VirtualCardsAPISpecification {
 // GetCustomerSCardsAPI - Get cards
 // This API will fetch all cards that belong to the specified customer
 func (s *VirtualCardsAPISpecification) GetCustomerSCardsAPI(ctx context.Context, aCorrelationID string, aMerchantCode string, phone string) (*operations.GetCustomerSCardsAPIResponse, error) {
+	hookCtx := hooks.HookContext{OperationID: "getCustomerSCardsApi"}
+
 	request := operations.GetCustomerSCardsAPIRequest{
 		ACorrelationID: aCorrelationID,
 		AMerchantCode:  aMerchantCode,
@@ -827,28 +834,47 @@ func (s *VirtualCardsAPISpecification) GetCustomerSCardsAPI(ctx context.Context,
 	}
 
 	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	url, err := utils.GenerateURL(ctx, baseURL, "/api/v1/cards/virtual/customer/{phone}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/v1/cards/virtual/customer/{phone}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
 	utils.PopulateHeaders(ctx, req, request)
 
 	client := s.sdkConfiguration.DefaultClient
 
-	httpRes, err := client.Do(req)
+	req, err = s.sdkConfiguration.Hooks.BeforeRequest(hooks.BeforeRequestContext{hookCtx}, req)
 	if err != nil {
-		return nil, fmt.Errorf("error sending request: %w", err)
+		return nil, err
 	}
-	if httpRes == nil {
-		return nil, fmt.Errorf("error sending request: no response")
+
+	httpRes, err := client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.sdkConfiguration.Hooks.AfterError(hooks.AfterErrorContext{hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
+		httpRes, err = s.sdkConfiguration.Hooks.AfterError(hooks.AfterErrorContext{hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		httpRes, err = s.sdkConfiguration.Hooks.AfterSuccess(hooks.AfterSuccessContext{hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	contentType := httpRes.Header.Get("Content-Type")
@@ -865,6 +891,7 @@ func (s *VirtualCardsAPISpecification) GetCustomerSCardsAPI(ctx context.Context,
 	}
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
+
 	switch {
 	case httpRes.StatusCode == 200:
 		switch {
@@ -890,6 +917,8 @@ func (s *VirtualCardsAPISpecification) GetCustomerSCardsAPI(ctx context.Context,
 // IssueCardAPI - Issue card
 // This API is used to issue new cards to your customers
 func (s *VirtualCardsAPISpecification) IssueCardAPI(ctx context.Context, aCorrelationID string, aMerchantCode string, requestBody *operations.IssueCardAPIRequestBody) (*operations.IssueCardAPIResponse, error) {
+	hookCtx := hooks.HookContext{OperationID: "issueCardApi"}
+
 	request := operations.IssueCardAPIRequest{
 		ACorrelationID: aCorrelationID,
 		AMerchantCode:  aMerchantCode,
@@ -897,32 +926,53 @@ func (s *VirtualCardsAPISpecification) IssueCardAPI(ctx context.Context, aCorrel
 	}
 
 	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	url := strings.TrimSuffix(baseURL, "/") + "/api/v1/cards/virtual/issue"
+	opURL, err := url.JoinPath(baseURL, "/api/v1/cards/virtual/issue")
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "RequestBody", "json", `request:"mediaType=application/json"`)
 	if err != nil {
-		return nil, fmt.Errorf("error serializing request body: %w", err)
+		return nil, err
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "POST", url, bodyReader)
+	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
-
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 	req.Header.Set("Content-Type", reqContentType)
 
 	utils.PopulateHeaders(ctx, req, request)
 
 	client := s.sdkConfiguration.DefaultClient
 
-	httpRes, err := client.Do(req)
+	req, err = s.sdkConfiguration.Hooks.BeforeRequest(hooks.BeforeRequestContext{hookCtx}, req)
 	if err != nil {
-		return nil, fmt.Errorf("error sending request: %w", err)
+		return nil, err
 	}
-	if httpRes == nil {
-		return nil, fmt.Errorf("error sending request: no response")
+
+	httpRes, err := client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.sdkConfiguration.Hooks.AfterError(hooks.AfterErrorContext{hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
+		httpRes, err = s.sdkConfiguration.Hooks.AfterError(hooks.AfterErrorContext{hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		httpRes, err = s.sdkConfiguration.Hooks.AfterSuccess(hooks.AfterSuccessContext{hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	contentType := httpRes.Header.Get("Content-Type")
@@ -939,6 +989,7 @@ func (s *VirtualCardsAPISpecification) IssueCardAPI(ctx context.Context, aCorrel
 	}
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
+
 	switch {
 	case httpRes.StatusCode == 201:
 		switch {
@@ -964,6 +1015,8 @@ func (s *VirtualCardsAPISpecification) IssueCardAPI(ctx context.Context, aCorrel
 // ModifySpendlimit - Modify card
 // This API is used to make modifications on an exisitng virtual card
 func (s *VirtualCardsAPISpecification) ModifySpendlimit(ctx context.Context, aCorrelationID string, aMerchantCode string, cardID string, requestBody *operations.ModifySpendlimitRequestBody) (*operations.ModifySpendlimitResponse, error) {
+	hookCtx := hooks.HookContext{OperationID: "modifySpendlimit"}
+
 	request := operations.ModifySpendlimitRequest{
 		ACorrelationID: aCorrelationID,
 		AMerchantCode:  aMerchantCode,
@@ -972,35 +1025,53 @@ func (s *VirtualCardsAPISpecification) ModifySpendlimit(ctx context.Context, aCo
 	}
 
 	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	url, err := utils.GenerateURL(ctx, baseURL, "/api/v1/cards/virtual/{cardID}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/v1/cards/virtual/{cardID}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "RequestBody", "json", `request:"mediaType=application/json"`)
 	if err != nil {
-		return nil, fmt.Errorf("error serializing request body: %w", err)
+		return nil, err
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "PUT", url, bodyReader)
+	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
-
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 	req.Header.Set("Content-Type", reqContentType)
 
 	utils.PopulateHeaders(ctx, req, request)
 
 	client := s.sdkConfiguration.DefaultClient
 
-	httpRes, err := client.Do(req)
+	req, err = s.sdkConfiguration.Hooks.BeforeRequest(hooks.BeforeRequestContext{hookCtx}, req)
 	if err != nil {
-		return nil, fmt.Errorf("error sending request: %w", err)
+		return nil, err
 	}
-	if httpRes == nil {
-		return nil, fmt.Errorf("error sending request: no response")
+
+	httpRes, err := client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.sdkConfiguration.Hooks.AfterError(hooks.AfterErrorContext{hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
+		httpRes, err = s.sdkConfiguration.Hooks.AfterError(hooks.AfterErrorContext{hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		httpRes, err = s.sdkConfiguration.Hooks.AfterSuccess(hooks.AfterSuccessContext{hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	contentType := httpRes.Header.Get("Content-Type")
@@ -1017,6 +1088,7 @@ func (s *VirtualCardsAPISpecification) ModifySpendlimit(ctx context.Context, aCo
 	}
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
+
 	switch {
 	case httpRes.StatusCode == 200:
 		switch {
@@ -1042,6 +1114,8 @@ func (s *VirtualCardsAPISpecification) ModifySpendlimit(ctx context.Context, aCo
 // ViewCardAPI - View card
 // This API is used to get card information and card webview URL
 func (s *VirtualCardsAPISpecification) ViewCardAPI(ctx context.Context, aCorrelationID string, aMerchantCode string, cardID string, merchantCustomerID string) (*operations.ViewCardAPIResponse, error) {
+	hookCtx := hooks.HookContext{OperationID: "viewCardApi"}
+
 	request := operations.ViewCardAPIRequest{
 		ACorrelationID:     aCorrelationID,
 		AMerchantCode:      aMerchantCode,
@@ -1050,17 +1124,17 @@ func (s *VirtualCardsAPISpecification) ViewCardAPI(ctx context.Context, aCorrela
 	}
 
 	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	url, err := utils.GenerateURL(ctx, baseURL, "/api/v1/cards/virtual/{cardID}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/v1/cards/virtual/{cardID}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
 	utils.PopulateHeaders(ctx, req, request)
 
@@ -1070,12 +1144,31 @@ func (s *VirtualCardsAPISpecification) ViewCardAPI(ctx context.Context, aCorrela
 
 	client := s.sdkConfiguration.DefaultClient
 
-	httpRes, err := client.Do(req)
+	req, err = s.sdkConfiguration.Hooks.BeforeRequest(hooks.BeforeRequestContext{hookCtx}, req)
 	if err != nil {
-		return nil, fmt.Errorf("error sending request: %w", err)
+		return nil, err
 	}
-	if httpRes == nil {
-		return nil, fmt.Errorf("error sending request: no response")
+
+	httpRes, err := client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.sdkConfiguration.Hooks.AfterError(hooks.AfterErrorContext{hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
+		httpRes, err = s.sdkConfiguration.Hooks.AfterError(hooks.AfterErrorContext{hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		httpRes, err = s.sdkConfiguration.Hooks.AfterSuccess(hooks.AfterSuccessContext{hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	contentType := httpRes.Header.Get("Content-Type")
@@ -1092,6 +1185,7 @@ func (s *VirtualCardsAPISpecification) ViewCardAPI(ctx context.Context, aCorrela
 	}
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
+
 	switch {
 	case httpRes.StatusCode == 200:
 		switch {
