@@ -799,9 +799,9 @@ func New(opts ...SDKOption) *VirtualCardsAPISpecification {
 		sdkConfiguration: sdkConfiguration{
 			Language:          "go",
 			OpenAPIDocVersion: "1.6.7",
-			SDKVersion:        "0.5.0",
-			GenVersion:        "2.258.2",
-			UserAgent:         "speakeasy-sdk/go 0.5.0 2.258.2 1.6.7 github.com/speakeasy-sdks/GDROID-sample-sdk",
+			SDKVersion:        "0.5.1",
+			GenVersion:        "2.263.3",
+			UserAgent:         "speakeasy-sdk/go 0.5.1 2.263.3 1.6.7 github.com/speakeasy-sdks/GDROID-sample-sdk",
 			Hooks:             hooks.New(),
 		},
 	}
@@ -848,12 +848,12 @@ func (s *VirtualCardsAPISpecification) GetCustomerSCardsAPI(ctx context.Context,
 
 	utils.PopulateHeaders(ctx, req, request)
 
-	client := s.sdkConfiguration.DefaultClient
-
 	req, err = s.sdkConfiguration.Hooks.BeforeRequest(hooks.BeforeRequestContext{hookCtx}, req)
 	if err != nil {
 		return nil, err
 	}
+
+	client := s.sdkConfiguration.DefaultClient
 
 	httpRes, err := client.Do(req)
 	if err != nil || httpRes == nil {
@@ -876,7 +876,6 @@ func (s *VirtualCardsAPISpecification) GetCustomerSCardsAPI(ctx context.Context,
 			return nil, err
 		}
 	}
-
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetCustomerSCardsAPIResponse{
@@ -946,12 +945,12 @@ func (s *VirtualCardsAPISpecification) IssueCardAPI(ctx context.Context, aCorrel
 
 	utils.PopulateHeaders(ctx, req, request)
 
-	client := s.sdkConfiguration.DefaultClient
-
 	req, err = s.sdkConfiguration.Hooks.BeforeRequest(hooks.BeforeRequestContext{hookCtx}, req)
 	if err != nil {
 		return nil, err
 	}
+
+	client := s.sdkConfiguration.DefaultClient
 
 	httpRes, err := client.Do(req)
 	if err != nil || httpRes == nil {
@@ -974,7 +973,6 @@ func (s *VirtualCardsAPISpecification) IssueCardAPI(ctx context.Context, aCorrel
 			return nil, err
 		}
 	}
-
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.IssueCardAPIResponse{
@@ -1045,12 +1043,12 @@ func (s *VirtualCardsAPISpecification) ModifySpendlimit(ctx context.Context, aCo
 
 	utils.PopulateHeaders(ctx, req, request)
 
-	client := s.sdkConfiguration.DefaultClient
-
 	req, err = s.sdkConfiguration.Hooks.BeforeRequest(hooks.BeforeRequestContext{hookCtx}, req)
 	if err != nil {
 		return nil, err
 	}
+
+	client := s.sdkConfiguration.DefaultClient
 
 	httpRes, err := client.Do(req)
 	if err != nil || httpRes == nil {
@@ -1073,7 +1071,6 @@ func (s *VirtualCardsAPISpecification) ModifySpendlimit(ctx context.Context, aCo
 			return nil, err
 		}
 	}
-
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ModifySpendlimitResponse{
@@ -1142,12 +1139,12 @@ func (s *VirtualCardsAPISpecification) ViewCardAPI(ctx context.Context, aCorrela
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
-	client := s.sdkConfiguration.DefaultClient
-
 	req, err = s.sdkConfiguration.Hooks.BeforeRequest(hooks.BeforeRequestContext{hookCtx}, req)
 	if err != nil {
 		return nil, err
 	}
+
+	client := s.sdkConfiguration.DefaultClient
 
 	httpRes, err := client.Do(req)
 	if err != nil || httpRes == nil {
@@ -1170,7 +1167,6 @@ func (s *VirtualCardsAPISpecification) ViewCardAPI(ctx context.Context, aCorrela
 			return nil, err
 		}
 	}
-
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ViewCardAPIResponse{

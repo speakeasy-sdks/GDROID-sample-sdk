@@ -4,22 +4,21 @@ management:
   docChecksum: 75701c8d7873ea9340830005721e547f
   docVersion: 1.6.7
   speakeasyVersion: internal
-  generationVersion: 2.258.2
-  releaseVersion: 0.5.0
-  configChecksum: faed156f652fb847797f54032d2c2486
+  generationVersion: 2.263.3
+  releaseVersion: 0.5.1
+  configChecksum: 85df794e9e589e008013e3ab53f81c5d
   repoURL: https://github.com/speakeasy-sdks/GDROID-sample-sdk.git
   repoSubDirectory: .
   installationURL: https://github.com/speakeasy-sdks/GDROID-sample-sdk
   published: true
 features:
   go:
-    core: 3.4.0
+    core: 3.4.1
     flattening: 2.81.1
     globalServerURLs: 2.82.1
 generatedFiles:
   - virtualcardsapispecification.go
   - go.mod
-  - go.sum
   - pkg/models/sdkerrors/sdkerror.go
   - pkg/types/bigint.go
   - pkg/types/date.go
