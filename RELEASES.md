@@ -149,3 +149,13 @@ Based on:
 - [go v0.5.1] .
 ### Releases
 - [Go v0.5.1] https://github.com/speakeasy-sdks/GDROID-sample-sdk/releases/tag/v0.5.1 - .
+
+## 2024-02-24 01:03:50
+### Changes
+Based on:
+- OpenAPI Doc 1.6.7 
+- Speakeasy CLI 1.193.4 (2.272.4) https://github.com/speakeasy-api/speakeasy
+### Generated
+- [go v0.5.2] .
+### Releases
+- [Go v0.5.2] https://github.com/speakeasy-sdks/GDROID-sample-sdk/releases/tag/v0.5.2 - .
