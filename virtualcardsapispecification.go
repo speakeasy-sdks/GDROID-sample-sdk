@@ -798,9 +798,9 @@ func New(opts ...SDKOption) *VirtualCardsAPISpecification {
 		sdkConfiguration: sdkConfiguration{
 			Language:          "go",
 			OpenAPIDocVersion: "1.6.7",
-			SDKVersion:        "0.6.0",
-			GenVersion:        "2.279.1",
-			UserAgent:         "speakeasy-sdk/go 0.6.0 2.279.1 1.6.7 github.com/speakeasy-sdks/GDROID-sample-sdk",
+			SDKVersion:        "0.6.1",
+			GenVersion:        "2.280.6",
+			UserAgent:         "speakeasy-sdk/go 0.6.1 2.280.6 1.6.7 github.com/speakeasy-sdks/GDROID-sample-sdk",
 			Hooks:             hooks.New(),
 		},
 	}
